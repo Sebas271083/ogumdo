@@ -43,7 +43,7 @@ Vite redirige `/api` al backend (ver `vite.config.js`), así que la cookie de se
 
 | Qué                                   | Dónde                                              |
 |---------------------------------------|----------------------------------------------------|
-| Banner GIF de la portada              | `frontend/public/img/banner.gif` (o `banner.mp4`, que tiene prioridad y pesa mucho menos) |
+| Banner de la portada                 | Archivo en `frontend/public/img/` + `"banner"` en `backend/contenido/escuela.json` (GIF, imagen o `.mp4`) |
 | Nombre, dirección, teléfono, WhatsApp, redes, horarios, estadísticas | `backend/contenido/escuela.json` |
 | Biografía, graduaciones y diplomas del Sabonim        | `backend/contenido/profesor.json` |
 | Foto y diplomas del Sabonim           | `frontend/public/img/profesor/` (y actualizá las rutas en `profesor.json`) |
@@ -55,7 +55,7 @@ Vite redirige `/api` al backend (ver `vite.config.js`), así que la cookie de se
 Los cambios en `backend/contenido/*.json` se ven al recargar, sin reiniciar el servidor.
 
 **Tip para el banner:** un GIF a pantalla completa puede pesar varios MB. Convertido a MP4 se ve igual y carga mucho más rápido:
-`ffmpeg -i banner.gif -movflags faststart -pix_fmt yuv420p -vf "scale=1920:-2" banner.mp4`.
+`ffmpeg -i banner.gif -movflags faststart -pix_fmt yuv420p -vf "scale=1920:-2" banner.mp4` y poné `"banner": "/img/banner.mp4"` en `escuela.json`.
 Mientras no haya ninguno, la portada muestra un fondo animado.
 
 ## Panel de administración (`/admin`)
