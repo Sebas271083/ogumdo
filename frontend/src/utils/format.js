@@ -17,6 +17,31 @@ export function antiguedad(desde) {
   return `${anios} ${anios === 1 ? 'año' : 'años'}${resto ? ` y ${resto} m` : ''}`
 }
 
+// diasSemana de escuela.json: 0 = domingo … 6 = sábado
+const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado']
+
+// [1, 3, 5] -> "Lunes, miércoles y viernes"
+export function diasTexto(dias = []) {
+  const nombres = [...dias].sort((a, b) => ((a + 6) % 7) - ((b + 6) % 7)).map((d) => DIAS[d])
+  const texto = nombres.length > 1 ? `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}` : nombres[0] ?? ''
+  return texto.charAt(0).toUpperCase() + texto.slice(1)
+}
+
+export const rangoHorario = (h) => `${h.inicio} – ${h.fin}`
+
+const isoLocal = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
+// "2026-10-27" -> "Hoy", "Mañana" o "Martes 27/10"
+export function fechaClase(iso) {
+  const hoy = new Date()
+  const manana = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + 1)
+  if (iso === isoLocal(hoy)) return 'Hoy'
+  if (iso === isoLocal(manana)) return 'Mañana'
+  const [a, m, d] = iso.split('-').map(Number)
+  const dia = DIAS[new Date(a, m - 1, d).getDay()]
+  return `${dia.charAt(0).toUpperCase() + dia.slice(1)} ${d}/${m}`
+}
+
 export const iniciales = (nombre = '') =>
   nombre
     .split(/\s+/)

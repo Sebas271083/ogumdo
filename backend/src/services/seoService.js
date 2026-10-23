@@ -14,6 +14,21 @@ function esPerfil(url) {
   }
 }
 
+const DIAS_SCHEMA = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+// Horarios de clase como horario de apertura: Google los muestra en la ficha del negocio
+function horariosSchema(horarios = []) {
+  const lista = horarios
+    .filter((h) => Array.isArray(h.diasSemana) && h.inicio && h.fin)
+    .map((h) => ({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: h.diasSemana.map((d) => `https://schema.org/${DIAS_SCHEMA[d]}`),
+      opens: h.inicio,
+      closes: h.fin,
+    }));
+  return lista.length ? lista : undefined;
+}
+
 // Datos estructurados (Schema.org): le dicen a Google qué es el negocio, dónde está y cómo contactarlo
 function jsonLdEscuela(escuela) {
   const d = escuela.direccionPostal;
@@ -39,6 +54,7 @@ function jsonLdEscuela(escuela) {
         }
       : escuela.direccion,
     sameAs: redes.length ? redes : undefined,
+    openingHoursSpecification: horariosSchema(escuela.horarios),
   };
   return `<script type="application/ld+json">${JSON.stringify(datos).replace(/</g, "\\u003c")}</script>`;
 }

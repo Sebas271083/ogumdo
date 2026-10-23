@@ -1,15 +1,20 @@
 import { borrarAlumno, crearAlumno, editarAlumno } from '../../api/client'
+import { useEscuela } from '../../context/EscuelaContext'
 import { useToast } from '../../context/ToastContext'
 import { CINTURONES } from '../../utils/cinturones'
+import { diasTexto } from '../../utils/format'
 
-// Alta (sin `alumno`) o edición de los datos de un alumno
-export default function AlumnoForm({ alumno, onGuardado, onEliminado }) {
+// Alta (sin `alumno`) o edición de los datos de un alumno.
+// `clases`: ids de los horarios asignados (definen qué clases ve y de cuáles recibe recordatorios)
+export default function AlumnoForm({ alumno, clases = [], onGuardado, onEliminado }) {
   const toast = useToast()
+  const { horarios = [] } = useEscuela()
   const nuevo = !alumno
 
   async function guardar(ev) {
     ev.preventDefault()
-    const datos = Object.fromEntries(new FormData(ev.currentTarget))
+    const formData = new FormData(ev.currentTarget)
+    const datos = { ...Object.fromEntries(formData), clases: formData.getAll('clases') }
     try {
       if (nuevo) {
         const { id } = await crearAlumno(datos)
@@ -76,6 +81,17 @@ export default function AlumnoForm({ alumno, onGuardado, onEliminado }) {
             <input name="password" type="text" required={nuevo} minLength={8} autoComplete="off" />
           </label>
         </div>
+        {horarios.length > 0 && (
+          <fieldset className="clases-alumno">
+            <legend>Clases a las que va (recibe recordatorios de estas; si no marcás ninguna, ve todas)</legend>
+            {horarios.map((h) => (
+              <label key={h.id} className="check">
+                <input type="checkbox" name="clases" value={h.id} defaultChecked={clases.includes(h.id)} />
+                {h.clase} <span className="muted">· {diasTexto(h.diasSemana)} {h.inicio}</span>
+              </label>
+            ))}
+          </fieldset>
+        )}
         <div className="botones">
           <button className="btn btn-sm" type="submit">
             {nuevo ? 'Crear alumno' : 'Guardar cambios'}

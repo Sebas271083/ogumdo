@@ -33,7 +33,7 @@ export default function AlumnoDetalle({ id, onCambio, onEliminado }) {
 
   return (
     <>
-      <AlumnoForm alumno={datos.user} onGuardado={refrescar} onEliminado={onEliminado} />
+      <AlumnoForm alumno={datos.user} clases={datos.clases} onGuardado={refrescar} onEliminado={onEliminado} />
       <RegistroForm alumno={datos.user} onAgregado={refrescar} />
       <div className="panel">
         <h2>Historial</h2>

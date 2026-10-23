@@ -37,7 +37,25 @@ export const enviarContacto = (datos) => request('/contacto', { method: 'POST', 
 // Alumno
 export const getPerfil = () => request('/alumno/perfil')
 
+// Clases y asistencia
+export const getProximasClases = () => request('/clases/proximas')
+export const responderClase = (claseId, fecha, asiste) =>
+  request(`/clases/${claseId}/${fecha}/asistencia`, { method: 'PUT', body: json({ asiste }) })
+export const getAvisos = () => request('/avisos')
+
+// Notificaciones push
+export const getClavePush = () => request('/push/clave')
+export const suscribirPush = (suscripcion) => request('/push/suscripcion', { method: 'POST', body: json(suscripcion) })
+export const desuscribirPush = (endpoint) => request('/push/suscripcion', { method: 'DELETE', body: json({ endpoint }) })
+export const probarPush = () => request('/push/prueba', { method: 'POST' })
+
 // Admin
+export const cancelarClase = (claseId, fecha, motivo) =>
+  request(`/admin/clases/${claseId}/${fecha}/cancelacion`, { method: 'POST', body: json({ motivo }) })
+export const reactivarClase = (claseId, fecha) => request(`/admin/clases/${claseId}/${fecha}/cancelacion`, { method: 'DELETE' })
+export const publicarAviso = (titulo, mensaje) => request('/admin/avisos', { method: 'POST', body: json({ titulo, mensaje }) })
+export const borrarAviso = (id) => request(`/admin/avisos/${id}`, { method: 'DELETE' })
+
 export const getAlumnos = () => request('/admin/alumnos')
 export const getAlumno = (id) => request(`/admin/alumnos/${id}`)
 export const crearAlumno = (datos) => request('/admin/alumnos', { method: 'POST', body: json(datos) })

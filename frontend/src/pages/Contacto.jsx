@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { enviarContacto } from '../api/client'
 import { useEscuela } from '../context/EscuelaContext'
+import { diasTexto, rangoHorario } from '../utils/format'
 import PageHero from '../components/PageHero'
 import Reveal from '../components/Reveal'
 
@@ -126,8 +127,8 @@ export default function Contacto() {
                 {e.horarios?.length > 0 && (
                   <Dato icono="horario">
                     {e.horarios.map((h) => (
-                      <div key={h.clase} className="muted">
-                        {h.clase}: {h.dias}, {h.hora}
+                      <div key={h.id} className="muted">
+                        {h.clase}: {diasTexto(h.diasSemana)}, {rangoHorario(h)}
                       </div>
                     ))}
                   </Dato>

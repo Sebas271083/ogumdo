@@ -26,9 +26,9 @@
     { "valor": "300+", "etiqueta": "Medallas en torneos" }
   ],
   "horarios": [
-    { "clase": "Infantiles (4 a 7 años)", "dias": "Lunes y miércoles", "hora": "17:30 – 18:30" },
-    { "clase": "Niños (8 a 13 años)", "dias": "Lunes, miércoles y viernes", "hora": "18:30 – 19:30" },
-    { "clase": "Adolescentes y adultos", "dias": "Martes y jueves", "hora": "19:30 – 21:00" },
-    { "clase": "Equipo de competencia", "dias": "Sábados", "hora": "10:00 – 12:00" }
+    { "id": "infantiles", "clase": "Infantiles (4 a 7 años)", "diasSemana": [1, 3], "inicio": "17:30", "fin": "18:30" },
+    { "id": "ninos", "clase": "Niños (8 a 13 años)", "diasSemana": [1, 3, 5], "inicio": "18:30", "fin": "19:30" },
+    { "id": "adultos", "clase": "Adolescentes y adultos", "diasSemana": [2, 4], "inicio": "19:30", "fin": "21:00" },
+    { "id": "competencia", "clase": "Equipo de competencia", "diasSemana": [6], "inicio": "10:00", "fin": "12:00" }
   ]
 }

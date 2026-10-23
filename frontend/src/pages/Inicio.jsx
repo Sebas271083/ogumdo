@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { getGaleria } from '../api/client'
 import { useEscuela } from '../context/EscuelaContext'
 import { useDatosIniciales } from '../context/DatosContext'
+import { diasTexto, rangoHorario } from '../utils/format'
 import Galeria from '../components/Galeria'
 import Reveal from '../components/Reveal'
 
@@ -171,12 +172,12 @@ export default function Inicio() {
                 </thead>
                 <tbody>
                   {escuela.horarios.map((h) => (
-                    <tr key={h.clase}>
+                    <tr key={h.id}>
                       <td>
                         <strong>{h.clase}</strong>
                       </td>
-                      <td>{h.dias}</td>
-                      <td>{h.hora}</td>
+                      <td>{diasTexto(h.diasSemana)}</td>
+                      <td>{rangoHorario(h)}</td>
                     </tr>
                   ))}
                 </tbody>

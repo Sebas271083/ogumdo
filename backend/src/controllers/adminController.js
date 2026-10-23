@@ -16,6 +16,7 @@ import {
   borrarRegistro,
 } from "../services/registrosService.js";
 import { borrarSesionesDeUsuario } from "../services/sesionesService.js";
+import { clasesDeAlumno, asignarClases } from "../services/clasesService.js";
 import { listarMensajes, marcarLeido, borrarMensaje } from "../services/mensajesService.js";
 import { crearFotos, getFoto, borrarFoto } from "../services/galeriaService.js";
 import { borrarArchivo } from "../middleware/upload.js";
@@ -54,7 +55,7 @@ export async function alumno(req, res, next) {
   try {
     const user = await getAlumno(Number(req.params.id));
     if (!user) return res.status(404).json({ error: "Alumno no encontrado" });
-    res.json({ user, registros: await listarRegistros(user.id) });
+    res.json({ user, registros: await listarRegistros(user.id), clases: await clasesDeAlumno(user.id) });
   } catch (err) {
     next(err);
   }
@@ -63,6 +64,7 @@ export async function alumno(req, res, next) {
 export async function crearAlumno(req, res, next) {
   try {
     const id = await crearUsuario(datosAlumno(req.body, { passwordObligatoria: true }));
+    if (Array.isArray(req.body?.clases)) await asignarClases(id, req.body.clases);
     res.status(201).json({ id });
   } catch (err) {
     next(err);
@@ -74,6 +76,7 @@ export async function editarAlumno(req, res, next) {
     const id = Number(req.params.id);
     const datos = datosAlumno(req.body, { passwordObligatoria: false });
     if (!(await actualizarAlumno(id, datos))) return res.status(404).json({ error: "Alumno no encontrado" });
+    if (Array.isArray(req.body?.clases)) await asignarClases(id, req.body.clases);
     if (datos.password) {
       await cambiarPassword(id, datos.password);
       await borrarSesionesDeUsuario(id); // lo desloguea de todos lados

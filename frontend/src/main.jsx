@@ -2,7 +2,13 @@ import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 import Raiz from './Raiz'
+import './utils/instalacion'
 import './index.css'
+
+// Service worker: hace instalable la web y recibe las notificaciones push (public/sw.js)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}))
+}
 
 const contenedor = document.getElementById('root')
 const app = (

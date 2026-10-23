@@ -60,12 +60,28 @@ Mientras no haya ninguno, la portada muestra un fondo animado.
 
 ## Panel de administración (`/admin`)
 
-- **Alumnos:** alta, edición y baja (cada alumno entra con su email y contraseña).
+- **Clases y avisos:** quién viene a cada clase de los próximos 7 días, cancelar o reactivar una clase (avisa a sus alumnos) y publicar avisos que llegan como notificación.
+- **Alumnos:** alta, edición y baja (cada alumno entra con su email y contraseña), y las clases a las que va cada uno.
 - **Registros:** graduaciones, títulos, capacitaciones y logros, con fecha, descripción y diploma adjunto (imagen o PDF). Al cargar una graduación se puede actualizar automáticamente el cinturón actual.
 - **Galería:** subir varias fotos a la vez y borrarlas.
 - **Mensajes:** bandeja del formulario de contacto.
 
 Los diplomas solo los puede ver el alumno dueño o el admin.
+
+## Asistencia, app instalable y notificaciones
+
+- Las clases salen de `horarios` en `backend/contenido/escuela.json` (`diasSemana`: 0 = domingo … 6 = sábado).
+  El `id` de cada horario identifica la clase: no lo cambies una vez que haya asistencias cargadas.
+- En su panel, cada alumno ve sus próximas clases y toca **Voy / No voy**; todos los alumnos ven quién va.
+- La web es una **PWA**: se instala en el celular desde Chrome (Android) o con *Compartir → Agregar a pantalla de inicio* (iPhone).
+- **Notificaciones push** (Android, escritorio e iPhone con iOS 16.4+ y la app instalada):
+  - recordatorio `RECORDATORIO_HORAS_ANTES` horas antes de cada clase (por defecto 3) a quien no respondió,
+    con los botones **Voy / No voy** en la misma notificación;
+  - aviso cuando el Sabonim cancela o reactiva una clase, y cuando publica un aviso.
+
+Las notificaciones necesitan claves VAPID: generá un par con `npm run vapid` (en `backend/`) y cargalas en
+`VAPID_PUBLIC_KEY` y `VAPID_PRIVATE_KEY`. Usá **siempre el mismo par**: si cambia, cada usuario tiene que volver
+a activar las notificaciones. Sin claves, la web funciona igual pero sin notificaciones.
 
 ## Producción
 
@@ -86,8 +102,10 @@ El `Dockerfile` de la raíz compila el frontend y arranca el backend en una sola
    - Ports Exposes: `4000`
    - Persistent Storage: volumen montado en `/app/backend/storage` (fotos y diplomas)
    - Variables: `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE`,
-     `SITE_URL=https://ogumdo.com.ar`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`
+     `SITE_URL=https://ogumdo.com.ar`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`,
+     `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`
 3. Después del primer deploy, en la **Terminal** de la app: `npm run init-db`.
+   Volvé a correrlo cada vez que se agreguen tablas nuevas a `backend/db/schema.sql` (no borra datos).
 
 Los textos de `backend/contenido/*.json` quedan dentro de la imagen: para cambiarlos, editá, hacé push y redeploy.
 

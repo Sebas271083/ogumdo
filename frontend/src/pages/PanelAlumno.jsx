@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
-import { getPerfil } from '../api/client'
+import { getAvisos, getPerfil } from '../api/client'
+import AppYNotificaciones from '../components/AppYNotificaciones'
+import Avisos from '../components/Avisos'
+import ProximasClases from '../components/ProximasClases'
 import { CINTURONES, indiceCinturon, nombreCinturon } from '../utils/cinturones'
 import { antiguedad, fecha, iniciales } from '../utils/format'
 import CambiarPassword from '../components/CambiarPassword'
@@ -9,11 +12,15 @@ import RegistrosTabs from '../components/RegistrosTabs'
 export default function PanelAlumno() {
   const [datos, setDatos] = useState(null)
   const [error, setError] = useState(null)
+  const [avisos, setAvisos] = useState([])
 
   useEffect(() => {
     getPerfil()
       .then(setDatos)
       .catch((err) => setError(err.message))
+    getAvisos()
+      .then(setAvisos)
+      .catch(() => {})
   }, [])
 
   if (error) return <div className="cargando">{error}</div>
@@ -50,6 +57,21 @@ export default function PanelAlumno() {
 
       <section className="sin-padding-top">
         <div className="container">
+          <AppYNotificaciones />
+
+          <div className="panel">
+            <h2>Próximas clases</h2>
+            <p className="muted">Avisá si venís: así el Sabonim y tus compañeros saben quién entrena.</p>
+            <ProximasClases />
+          </div>
+
+          {avisos.length > 0 && (
+            <div className="panel">
+              <h2>Avisos del Sabonim</h2>
+              <Avisos avisos={avisos.slice(0, 5)} />
+            </div>
+          )}
+
           <div className="kpis">
             {kpis.map(([valor, etiqueta]) => (
               <div className="kpi" key={etiqueta}>

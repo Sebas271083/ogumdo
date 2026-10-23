@@ -2,10 +2,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { getMensajes } from '../../api/client'
 import CambiarPassword from '../../components/CambiarPassword'
 import AdminAlumnos from './AdminAlumnos'
+import AdminClases from './AdminClases'
 import AdminGaleria from './AdminGaleria'
 import AdminMensajes from './AdminMensajes'
 
 const VISTAS = [
+  ['clases', 'Clases y avisos'],
   ['alumnos', 'Alumnos'],
   ['galeria', 'Galería'],
   ['mensajes', 'Mensajes'],
@@ -13,7 +15,7 @@ const VISTAS = [
 ]
 
 export default function Admin() {
-  const [vista, setVista] = useState('alumnos')
+  const [vista, setVista] = useState('clases')
   const [mensajes, setMensajes] = useState([])
 
   const recargarMensajes = useCallback(() => {
@@ -47,6 +49,7 @@ export default function Admin() {
 
       <section className="admin-section">
         <div className="container">
+          {vista === 'clases' && <AdminClases />}
           {vista === 'alumnos' && <AdminAlumnos />}
           {vista === 'galeria' && <AdminGaleria />}
           {vista === 'mensajes' && <AdminMensajes mensajes={mensajes} onCambio={recargarMensajes} />}
