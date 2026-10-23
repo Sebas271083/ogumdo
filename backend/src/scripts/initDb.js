@@ -21,9 +21,12 @@ const conexion = await mysql.createConnection({
   password: process.env.MYSQL_PASSWORD,
   multipleStatements: true,
 });
-await conexion.query(
-  `CREATE DATABASE IF NOT EXISTS \`${database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`
-);
+// En hostings como Coolify la base ya viene creada y el usuario no es root: sin permiso global,
+// incluso "CREATE DATABASE IF NOT EXISTS" falla. Solo se crea si todavía no existe.
+const [existentes] = await conexion.query("SHOW DATABASES LIKE ?", [database]);
+if (!existentes.length) {
+  await conexion.query(`CREATE DATABASE \`${database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
+}
 await conexion.query(`USE \`${database}\``);
 await conexion.query(await fs.readFile(SCHEMA_PATH, "utf8"));
 await conexion.end();

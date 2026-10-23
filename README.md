@@ -7,9 +7,9 @@ Sitio público (inicio, historia, Sabonim, galería y contacto) con acceso para 
 ```
 backend/     API Express (routes → controllers → services), sesiones con cookie, subida de archivos
   contenido/ escuela.json y profesor.json (textos editables)
+  db/        schema.sql
   storage/   diplomas y fotos subidas (no se versiona)
 frontend/    React + Vite (React Router)
-db/          schema.sql
 ```
 
 ## Cómo ejecutarlo
