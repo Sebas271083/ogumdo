@@ -41,6 +41,7 @@ export async function enviarAUsuarios(usuarioIds, payload) {
         // 404/410: el usuario desinstaló o revocó el permiso; la suscripción ya no sirve
         if (err.statusCode === 404 || err.statusCode === 410) {
           await pool.query("DELETE FROM push_suscripciones WHERE id = ?", [s.id]);
+          console.log(`Push: suscripción vencida de usuario ${s.usuario_id} (${err.statusCode}), borrada`);
         } else {
           console.error(`Push a usuario ${s.usuario_id} falló:`, err.statusCode ?? "", err.body || err.message);
         }
@@ -49,6 +50,16 @@ export async function enviarAUsuarios(usuarioIds, payload) {
     })
   );
   return resultados.filter((r) => r.status === "fulfilled").length;
+}
+
+// Para el panel del Sabonim: cuántos alumnos van a recibir un aviso
+export async function alumnosConNotificaciones() {
+  const [[{ total }]] = await pool.query(
+    `SELECT COUNT(DISTINCT s.usuario_id) AS total
+     FROM push_suscripciones s JOIN usuarios u ON u.id = s.usuario_id
+     WHERE u.rol = 'alumno'`
+  );
+  return total;
 }
 
 export async function enviarATodosLosAlumnos(payload) {

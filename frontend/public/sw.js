@@ -65,6 +65,33 @@ async function responderAsistencia(datos, asiste) {
   }
 }
 
+// El navegador puede renovar la suscripción por su cuenta: hay que avisarle al servidor la nueva,
+// si no los envíos a la vieja fallan con 410 y el dispositivo deja de recibir notificaciones.
+function claveABytes(base64) {
+  const relleno = '='.repeat((4 - (base64.length % 4)) % 4)
+  const binario = atob((base64 + relleno).replace(/-/g, '+').replace(/_/g, '/'))
+  return Uint8Array.from(binario, (c) => c.charCodeAt(0))
+}
+
+self.addEventListener('pushsubscriptionchange', (event) => {
+  event.waitUntil(
+    (async () => {
+      const { clave } = await (await fetch('/api/push/clave')).json()
+      if (!clave) return
+      const nueva = await self.registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: claveABytes(clave),
+      })
+      await fetch('/api/push/suscripcion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(nueva.toJSON()),
+      })
+    })(),
+  )
+})
+
 self.addEventListener('notificationclick', (event) => {
   const datos = event.notification.data || {}
   event.notification.close()

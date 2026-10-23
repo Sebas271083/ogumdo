@@ -48,6 +48,7 @@ export const getClavePush = () => request('/push/clave')
 export const suscribirPush = (suscripcion) => request('/push/suscripcion', { method: 'POST', body: json(suscripcion) })
 export const desuscribirPush = (endpoint) => request('/push/suscripcion', { method: 'DELETE', body: json({ endpoint }) })
 export const probarPush = () => request('/push/prueba', { method: 'POST' })
+export const getEstadoPush = () => request('/admin/push/estado')
 
 // Admin
 export const cancelarClase = (claseId, fecha, motivo) =>

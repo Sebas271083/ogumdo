@@ -1,4 +1,11 @@
-import { clavePublica, guardarSuscripcion, borrarSuscripcion, enviarAUsuarios, pushHabilitado } from "../services/pushService.js";
+import {
+  clavePublica,
+  guardarSuscripcion,
+  borrarSuscripcion,
+  enviarAUsuarios,
+  pushHabilitado,
+  alumnosConNotificaciones,
+} from "../services/pushService.js";
 import { httpError } from "../utils/httpError.js";
 
 export function clave(req, res) {
@@ -23,6 +30,14 @@ export async function desuscribir(req, res, next) {
   try {
     await borrarSuscripcion(req.user.id, String(req.body?.endpoint ?? ""));
     res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function estado(req, res, next) {
+  try {
+    res.json({ habilitado: pushHabilitado, alumnos: await alumnosConNotificaciones() });
   } catch (err) {
     next(err);
   }

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { borrarAviso, getAvisos, publicarAviso } from '../../api/client'
+import { borrarAviso, getAvisos, getEstadoPush, publicarAviso } from '../../api/client'
 import { useToast } from '../../context/ToastContext'
 import AppYNotificaciones from '../../components/AppYNotificaciones'
 import Avisos from '../../components/Avisos'
@@ -9,11 +9,15 @@ export default function AdminClases() {
   const toast = useToast()
   const [avisos, setAvisos] = useState([])
   const [enviando, setEnviando] = useState(false)
+  const [push, setPush] = useState(null)
 
   const cargarAvisos = useCallback(() => getAvisos().then(setAvisos), [])
 
   useEffect(() => {
     cargarAvisos().catch(() => {})
+    getEstadoPush()
+      .then(setPush)
+      .catch(() => {})
   }, [cargarAvisos])
 
   async function enviar(ev) {
@@ -55,6 +59,13 @@ export default function AdminClases() {
 
       <div className="panel">
         <h2>Enviar un aviso</h2>
+        {push && (
+          <p className="muted">
+            {push.habilitado
+              ? `📱 ${push.alumnos} ${push.alumnos === 1 ? 'alumno tiene' : 'alumnos tienen'} las notificaciones activadas: a ellos les llega el aviso al instante. Todos lo ven en su panel.`
+              : '⚠️ Las notificaciones no están configuradas en el servidor (faltan las claves VAPID): el aviso solo se ve en el panel.'}
+          </p>
+        )}
         <form className="form" onSubmit={enviar}>
           <label>
             Título

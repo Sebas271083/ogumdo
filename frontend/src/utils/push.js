@@ -19,6 +19,34 @@ function claveABytes(base64) {
   return Uint8Array.from(binario, (c) => c.charCodeAt(0))
 }
 
+const mismaClave = (suscripcion, clave) => {
+  const actual = suscripcion.options?.applicationServerKey
+  if (!actual) return true
+  const a = new Uint8Array(actual)
+  const b = claveABytes(clave)
+  return a.length === b.length && a.every((x, i) => x === b[i])
+}
+
+// Se llama cada vez que se abre el panel. Si el permiso ya está dado, vuelve a registrar la
+// suscripción en el servidor (y la recrea si se perdió o es de otras claves VAPID). Así se
+// recupera sola si el navegador la renovó o el servidor la borró, y queda asociada al usuario
+// que inició sesión en este dispositivo.
+export async function sincronizarSuscripcion() {
+  if (!pushSoportado() || Notification.permission !== 'granted') return false
+  const { clave } = await getClavePush()
+  if (!clave) return false
+
+  const registro = await navigator.serviceWorker.ready
+  let suscripcion = await registro.pushManager.getSubscription()
+  if (suscripcion && !mismaClave(suscripcion, clave)) {
+    await suscripcion.unsubscribe()
+    suscripcion = null
+  }
+  suscripcion ??= await registro.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: claveABytes(clave) })
+  await suscribirPush(suscripcion.toJSON())
+  return true
+}
+
 export async function suscripcionActual() {
   if (!pushSoportado()) return null
   const registro = await navigator.serviceWorker.ready

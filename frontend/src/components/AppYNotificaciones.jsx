@@ -7,7 +7,7 @@ import {
   esAppInstalada,
   esIos,
   pushSoportado,
-  suscripcionActual,
+  sincronizarSuscripcion,
 } from '../utils/push'
 
 // Bloque del panel: "Instalar app" + "Activar notificaciones". Se oculta solo cuando no hay nada que hacer.
@@ -20,8 +20,8 @@ export default function AppYNotificaciones() {
 
   useEffect(() => {
     setEntorno({ soportado: pushSoportado(), ios: esIos(), instalada: esAppInstalada() })
-    suscripcionActual()
-      .then((s) => setActivas(Boolean(s)))
+    sincronizarSuscripcion()
+      .then(setActivas)
       .catch(() => setActivas(false))
     return alCambiarInstalable(setInstalable)
   }, [])
