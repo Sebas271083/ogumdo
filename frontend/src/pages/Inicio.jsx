@@ -39,19 +39,15 @@ const BENEFICIOS = [
   },
 ]
 
-// Banner: usa banner.mp4 si existe (más liviano), si no banner.gif, y si no hay ninguno
-// queda el fondo animado de CSS.
-function BannerMedia() {
-  const [medio, setMedio] = useState('video')
-  if (medio === 'video') {
-    return (
-      <video autoPlay muted loop playsInline aria-hidden="true">
-        <source src="/img/banner.mp4" type="video/mp4" onError={() => setMedio('gif')} />
-      </video>
-    )
+// Banner de la portada: "banner" en escuela.json (GIF, imagen o .mp4). Sin banner queda el
+// fondo animado de CSS. No se detecta con onError: con el render en el servidor el error
+// llega antes de que React escuche y el banner quedaba en blanco.
+function BannerMedia({ src }) {
+  if (!src) return null
+  if (src.endsWith('.mp4')) {
+    return <video src={src} autoPlay muted loop playsInline aria-hidden="true" />
   }
-  if (medio === 'gif') return <img src="/img/banner.gif" alt="" onError={() => setMedio(null)} />
-  return null
+  return <img src={src} alt="" />
 }
 
 export default function Inicio() {
@@ -70,7 +66,7 @@ export default function Inicio() {
       <section className="hero">
         <div className="hero-fallback" />
         <div className="hero-media">
-          <BannerMedia />
+          <BannerMedia src={escuela.banner} />
         </div>
         <div className="container hero-content">
           <img className="hero-logo" src="/img/logo.jpg" alt={`Logo de ${escuela.nombre}`} />
