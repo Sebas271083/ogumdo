@@ -12,4 +12,6 @@ export default defineConfig(({ isSsrBuild }) => ({
   },
   // El bundle para el servidor (dist-server) no necesita las imágenes de public/
   build: { copyPublicDir: !isSsrBuild },
+  // dist-server incluye React adentro: así el backend lo puede usar sin los node_modules del frontend
+  ssr: { noExternal: true },
 }))

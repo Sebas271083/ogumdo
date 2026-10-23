@@ -74,6 +74,23 @@ cd frontend && npm run build     # genera frontend/dist (navegador) y frontend/d
 cd ../backend && npm start       # sirve la API y la web en el mismo puerto
 ```
 
+Requiere Node **22.12 o superior** (lo exige Vite 8).
+
+### Deploy en Coolify
+
+El `Dockerfile` de la raíz compila el frontend y arranca el backend en una sola imagen.
+
+1. **MySQL:** + New → Databases → MySQL (base `taekwondo`). Copiá los datos de la *Internal URL*.
+2. **App:** + New → repositorio `ogumdo`, con:
+   - Build Pack: **Dockerfile**, Base Directory: `/`
+   - Ports Exposes: `4000`
+   - Persistent Storage: volumen montado en `/app/backend/storage` (fotos y diplomas)
+   - Variables: `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE`,
+     `SITE_URL=https://ogumdo.com.ar`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`
+3. Después del primer deploy, en la **Terminal** de la app: `npm run init-db`.
+
+Los textos de `backend/contenido/*.json` quedan dentro de la imagen: para cambiarlos, editá, hacé push y redeploy.
+
 ## SEO
 
 En producción las páginas públicas (`/`, `/historia`, `/profesor`, `/galeria`, `/contacto`) se renderizan
