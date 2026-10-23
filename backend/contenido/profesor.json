@@ -1,0 +1,24 @@
+{
+  "nombre": "Sabonim Jose Luis De Luca",
+  "grado": "6° Dan CAT",
+  "foto": "/img/profesor/maestro.jpg",
+  "frase": "El taekwondo no se trata de vencer a otros, sino de superarte a vos mismo cada día.",
+  "bio": [
+    "Encontró en el taekwondo mucho más que un deporte: una forma de vida. Con constancia y disciplina recorrió el camino del cinturón blanco al cinturón negro, y desde entonces no dejó de formarse para seguir creciendo como practicante y como instructor.",
+    "Fundó Ogum Do con el objetivo de transmitir no solo la técnica, sino también los valores del taekwondo: cortesía, integridad, perseverancia, autocontrol y espíritu indomable. Hoy acompaña a cada alumno en su propio camino, sin importar la edad a la que empiece."
+  ],
+  "graduaciones": [
+    { "grado": "1° Dan", "fecha": "1998", "entidad": "Kukkiwon", "detalle": "Primer cinturón negro, Seúl" },
+    { "grado": "2° Dan", "fecha": "2001", "entidad": "Kukkiwon", "detalle": "" },
+    { "grado": "3° Dan", "fecha": "2005", "entidad": "Kukkiwon", "detalle": "Habilitación como instructor" },
+    { "grado": "4° Dan", "fecha": "2010", "entidad": "Kukkiwon", "detalle": "Título de Sabonim" },
+    { "grado": "5° Dan", "fecha": "2018", "entidad": "Kukkiwon", "detalle": "" },
+    { "grado": "6° Dan", "fecha": "2018", "entidad": "Kukkiwon", "detalle": "" }
+  ],
+  "diplomas": [
+    { "titulo": "Instructor Internacional", "entidad": "Kukkiwon – World Taekwondo Academy", "fecha": "2010", "imagen": "/img/profesor/diploma-placeholder.svg" },
+    { "titulo": "Árbitro Nacional de Combate", "entidad": "Confederación Argentina de Taekwondo", "fecha": "2012", "imagen": "/img/profesor/diploma-placeholder.svg" },
+    { "titulo": "Entrenador Deportivo Nivel III", "entidad": "ENARD", "fecha": "2015", "imagen": "/img/profesor/diploma-placeholder.svg" },
+    { "titulo": "Juez de Poomsae", "entidad": "World Taekwondo", "fecha": "2019", "imagen": "/img/profesor/diploma-placeholder.svg" }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "taekwondo-backend",
+  "version": "1.0.0",
+  "description": "API de la web de la escuela de taekwondo: contenido, galería, contacto y panel de alumnos.",
+  "main": "src/server.js",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "init-db": "node src/scripts/initDb.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.0.2",
+    "mysql2": "^3.24.4"
+  }
+}

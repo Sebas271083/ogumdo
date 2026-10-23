@@ -1,0 +1,33 @@
+{
+  "nombre": "Ogum Do Taekwondo",
+  "lema": "Disciplina, respeto y superación",
+  "descripcion": "Escuela de taekwondo para niños, adolescentes y adultos. Formamos deportistas y personas con valores desde hace más de 20 años.",
+  "direccion": "Concepción Arenal 3545, C1427EKC, Ciudad Autónoma de Buenos Aires",
+  "barrio": "",
+  "direccionPostal": {
+    "calle": "Concepción Arenal 3545",
+    "codigoPostal": "C1427EKC",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "pais": "AR"
+  },
+  "telefono": "+54 11 1234-5678",
+  "whatsapp": "5491112345678",
+  "email": "contacto@tuescuela.com",
+  "redes": {
+    "instagram": "https://instagram.com/",
+    "facebook": "https://facebook.com/",
+    "youtube": "https://youtube.com/"
+  },
+  "estadisticas": [
+    { "valor": "20+", "etiqueta": "Años de trayectoria" },
+    { "valor": "150", "etiqueta": "Alumnos activos" },
+    { "valor": "80+", "etiqueta": "Cinturones negros formados" },
+    { "valor": "300+", "etiqueta": "Medallas en torneos" }
+  ],
+  "horarios": [
+    { "clase": "Infantiles (4 a 7 años)", "dias": "Lunes y miércoles", "hora": "17:30 – 18:30" },
+    { "clase": "Niños (8 a 13 años)", "dias": "Lunes, miércoles y viernes", "hora": "18:30 – 19:30" },
+    { "clase": "Adolescentes y adultos", "dias": "Martes y jueves", "hora": "19:30 – 21:00" },
+    { "clase": "Equipo de competencia", "dias": "Sábados", "hora": "10:00 – 12:00" }
+  ]
+}
