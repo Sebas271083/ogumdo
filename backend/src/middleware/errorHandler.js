@@ -7,7 +7,10 @@ export function errorHandler(err, req, res, next) {
   req.files?.forEach((f) => borrarArchivo(f.filename));
 
   if (err instanceof multer.MulterError) {
-    const mensaje = err.code === "LIMIT_FILE_SIZE" ? "El archivo supera los 8 MB" : err.field || err.message;
+    const mensaje =
+      err.code === "LIMIT_FILE_SIZE"
+        ? "El archivo es demasiado grande (máx. 8 MB para fotos y diplomas, 25 MB para descargas)"
+        : err.field || err.message;
     return res.status(400).json({ error: mensaje });
   }
   if (err.code === "ER_DUP_ENTRY") {

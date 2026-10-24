@@ -38,6 +38,8 @@ function jsonLdEscuela(escuela) {
     "@type": "SportsActivityLocation",
     "@id": `${SITE_URL}/#escuela`,
     name: escuela.nombre,
+    // Cómo lo escribe la gente al buscar
+    alternateName: ["Ogumdo", "Ogum Do", "Ogumdo Taekwondo"],
     description: escuela.descripcion,
     url: `${SITE_URL}/`,
     logo: urlAbsoluta("/img/logo.jpg"),

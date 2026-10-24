@@ -102,9 +102,49 @@ CREATE TABLE IF NOT EXISTS push_suscripciones (
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Álbumes de la galería (eventos). Las fotos sin álbum son las generales del dojang.
+CREATE TABLE IF NOT EXISTS albumes (
+  id           INT PRIMARY KEY AUTO_INCREMENT,
+  nombre       VARCHAR(120) NOT NULL,
+  descripcion  VARCHAR(300) NULL,
+  fecha        DATE NULL,
+  creado_ts    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- album_id se agrega también por migración en initDb.js para las bases creadas antes de los álbumes
 CREATE TABLE IF NOT EXISTS galeria (
   id         INT PRIMARY KEY AUTO_INCREMENT,
   titulo     VARCHAR(150) NULL,
   archivo    VARCHAR(100) NOT NULL,
-  creado_ts  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  album_id   INT NULL,
+  creado_ts  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (album_id) REFERENCES albumes(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Archivos para descargar (reglamentos, historia, traducciones...)
+CREATE TABLE IF NOT EXISTS descargas (
+  id              INT PRIMARY KEY AUTO_INCREMENT,
+  titulo          VARCHAR(150) NOT NULL,
+  descripcion     VARCHAR(300) NULL,
+  categoria       VARCHAR(40) NOT NULL DEFAULT 'otros',
+  archivo         VARCHAR(100) NOT NULL,
+  archivo_nombre  VARCHAR(255) NOT NULL,
+  tamano          INT NOT NULL DEFAULT 0,
+  publico         BOOLEAN NOT NULL DEFAULT TRUE,
+  creado_ts       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Calendario de fechas importantes
+CREATE TABLE IF NOT EXISTS eventos (
+  id           INT PRIMARY KEY AUTO_INCREMENT,
+  titulo       VARCHAR(150) NOT NULL,
+  descripcion  TEXT NULL,
+  tipo         VARCHAR(20) NOT NULL DEFAULT 'evento',
+  fecha        DATE NOT NULL,
+  fecha_fin    DATE NULL,
+  hora         VARCHAR(5) NULL,
+  lugar        VARCHAR(150) NULL,
+  publico      BOOLEAN NOT NULL DEFAULT TRUE,
+  creado_ts    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_eventos_fecha (fecha)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

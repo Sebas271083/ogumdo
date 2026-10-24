@@ -8,6 +8,8 @@ export const LINKS = [
   ['/historia', 'Historia'],
   ['/profesor', 'Sabonim'],
   ['/galeria', 'Galería'],
+  ['/calendario', 'Calendario'],
+  ['/descargas', 'Descargas'],
   ['/contacto', 'Contacto'],
 ]
 

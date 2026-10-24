@@ -42,6 +42,22 @@ export function fechaClase(iso) {
   return `${dia.charAt(0).toUpperCase() + dia.slice(1)} ${d}/${m}`
 }
 
+export function tamanoArchivo(bytes = 0) {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`
+  return `${(bytes / 1024 / 1024).toFixed(1).replace('.', ',')} MB`
+}
+
+const MESES_LARGOS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+
+// "2026-12-12" -> "Diciembre 2026"
+export function mesAnio(iso) {
+  const m = MESES_LARGOS[Number(iso.slice(5, 7)) - 1]
+  return `${m.charAt(0).toUpperCase() + m.slice(1)} ${iso.slice(0, 4)}`
+}
+
+// Para el bloque de fecha del calendario: { dia: "12", mes: "dic" }
+export const partesFecha = (iso) => ({ dia: String(Number(iso.slice(8, 10))), mes: fecha(iso).split(' ')[1] })
+
 export const iniciales = (nombre = '') =>
   nombre
     .split(/\s+/)

@@ -6,6 +6,8 @@ import Historia from './pages/Historia'
 import Profesor from './pages/Profesor'
 import GaleriaPage from './pages/GaleriaPage'
 import Contacto from './pages/Contacto'
+import Calendario from './pages/Calendario'
+import Descargas from './pages/Descargas'
 import Login from './pages/Login'
 import PanelAlumno from './pages/PanelAlumno'
 import Admin from './pages/admin/Admin'
@@ -19,6 +21,8 @@ export default function App() {
         <Route path="historia" element={<Historia />} />
         <Route path="profesor" element={<Profesor />} />
         <Route path="galeria" element={<GaleriaPage />} />
+        <Route path="calendario" element={<Calendario />} />
+        <Route path="descargas" element={<Descargas />} />
         <Route path="contacto" element={<Contacto />} />
         <Route path="login" element={<Login />} />
         <Route

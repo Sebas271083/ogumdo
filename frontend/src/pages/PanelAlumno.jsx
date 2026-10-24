@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { getAvisos, getPerfil } from '../api/client'
+import { Link } from 'react-router'
+import { getAvisos, getEventos, getPerfil } from '../api/client'
+import Evento from '../components/Evento'
 import AppYNotificaciones from '../components/AppYNotificaciones'
 import Avisos from '../components/Avisos'
 import ProximasClases from '../components/ProximasClases'
@@ -13,8 +15,12 @@ export default function PanelAlumno() {
   const [datos, setDatos] = useState(null)
   const [error, setError] = useState(null)
   const [avisos, setAvisos] = useState([])
+  const [eventos, setEventos] = useState([])
 
   useEffect(() => {
+    getEventos()
+      .then(({ hoy, eventos }) => setEventos(eventos.filter((e) => (e.fecha_fin || e.fecha) >= hoy).slice(0, 3)))
+      .catch(() => {})
     getPerfil()
       .then(setDatos)
       .catch((err) => setError(err.message))
@@ -64,6 +70,20 @@ export default function PanelAlumno() {
             <p className="muted">Avisá si venís: así el Sabonim y tus compañeros saben quién entrena.</p>
             <ProximasClases />
           </div>
+
+          {eventos.length > 0 && (
+            <div className="panel">
+              <div className="panel-titulo">
+                <h2>Próximas fechas</h2>
+                <Link to="/calendario">Ver calendario →</Link>
+              </div>
+              <div className="eventos">
+                {eventos.map((e) => (
+                  <Evento key={e.id} e={e} />
+                ))}
+              </div>
+            </div>
+          )}
 
           {avisos.length > 0 && (
             <div className="panel">

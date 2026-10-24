@@ -34,6 +34,10 @@ export const getProfesor = () => request('/contenido/profesor')
 export const getGaleria = (params = {}) => request(`/galeria?${new URLSearchParams(params)}`)
 export const enviarContacto = (datos) => request('/contacto', { method: 'POST', body: json(datos) })
 
+export const getAlbumes = () => request('/albumes')
+export const getDescargas = () => request('/descargas')
+export const getEventos = () => request('/eventos')
+
 // Alumno
 export const getPerfil = () => request('/alumno/perfil')
 
@@ -68,6 +72,17 @@ export const borrarRegistro = (id) => request(`/admin/registros/${id}`, { method
 
 export const subirFotos = (formData) => request('/admin/galeria', { method: 'POST', body: formData })
 export const borrarFoto = (id) => request(`/admin/galeria/${id}`, { method: 'DELETE' })
+export const moverFoto = (id, albumId) => request(`/admin/galeria/${id}`, { method: 'PATCH', body: json({ album_id: albumId }) })
+export const crearAlbum = (datos) => request('/admin/albumes', { method: 'POST', body: json(datos) })
+export const borrarAlbum = (id) => request(`/admin/albumes/${id}`, { method: 'DELETE' })
+
+export const subirDescarga = (formData) => request('/admin/descargas', { method: 'POST', body: formData })
+export const editarDescarga = (id, datos) => request(`/admin/descargas/${id}`, { method: 'PUT', body: json(datos) })
+export const borrarDescarga = (id) => request(`/admin/descargas/${id}`, { method: 'DELETE' })
+
+export const crearEvento = (datos) => request('/admin/eventos', { method: 'POST', body: json(datos) })
+export const editarEvento = (id, datos) => request(`/admin/eventos/${id}`, { method: 'PUT', body: json(datos) })
+export const borrarEvento = (id) => request(`/admin/eventos/${id}`, { method: 'DELETE' })
 
 export const getMensajes = () => request('/admin/mensajes')
 export const marcarMensaje = (id, leido) => request(`/admin/mensajes/${id}`, { method: 'PATCH', body: json({ leido }) })

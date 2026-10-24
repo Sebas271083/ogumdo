@@ -630,6 +630,84 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--red)
 .clases-alumno legend { font-size: 0.85rem; font-weight: 600; color: var(--muted); padding: 0 0.4rem; }
 .clases-alumno label.check { align-self: auto; padding: 0; color: var(--text); }
 
+/* ========== Calendario ========== */
+.chip { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 999px; background: var(--surface-3); color: var(--text); white-space: nowrap; }
+.chip.privado { background: rgba(242, 183, 5, 0.15); color: var(--gold); }
+.calendario .mes + .mes { margin-top: 2.5rem; }
+.calendario .mes h2 { font-size: 2rem; }
+.eventos { display: grid; gap: 0.75rem; }
+.evento {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 1.1rem;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+}
+.evento.pasado { opacity: 0.55; }
+.evento-fecha { text-align: center; background: var(--bg); border-radius: 10px; padding: 0.5rem 0; border-top: 4px solid var(--blue); }
+.evento.tipo-examen .evento-fecha { border-color: var(--gold); }
+.evento.tipo-torneo .evento-fecha { border-color: var(--red); }
+.evento.tipo-sin-clase .evento-fecha { border-color: var(--muted); }
+.evento-fecha strong { display: block; font-family: var(--font-display); font-size: 2rem; line-height: 1; }
+.evento-fecha span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.evento-etiquetas { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
+.evento-info h4 { margin: 0; font-size: 1.05rem; }
+.evento-info p { margin: 0.15rem 0 0; font-size: 0.9rem; }
+.evento-desc { white-space: pre-wrap; }
+.evento-acciones { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end; }
+.pasados { margin-top: 2.5rem; }
+.pasados summary { cursor: pointer; color: var(--muted); font-weight: 600; margin-bottom: 1rem; }
+.nota-alumnos { margin-top: 2rem; }
+
+/* ========== Descargas ========== */
+.descargas .categoria + .categoria { margin-top: 2.5rem; }
+.descargas .categoria h2 { font-size: 2rem; }
+.archivos { display: grid; gap: 0.75rem; }
+.archivo {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.1rem;
+}
+.archivo-ext { height: 64px; border-radius: 8px; display: grid; place-items: center; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.05em; background: var(--surface-3); }
+.archivo-ext.ext-pdf { background: rgba(227, 38, 59, 0.2); color: #ff8a97; }
+.archivo-ext.ext-doc, .archivo-ext.ext-docx { background: rgba(47, 91, 234, 0.2); color: #8fa8ff; }
+.archivo-ext.ext-ppt, .archivo-ext.ext-pptx { background: rgba(242, 183, 5, 0.18); color: var(--gold); }
+.archivo-info h4 { margin: 0; font-size: 1.02rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.archivo-info p { margin: 0.2rem 0 0; font-size: 0.9rem; }
+.archivo-peso { font-size: 0.8rem; color: var(--muted); }
+.archivo-acciones { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
+
+/* ========== Galería por álbumes ========== */
+.filtros { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+.filtros button {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  font: 600 0.9rem var(--font-body);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.filtros button:hover { color: var(--text); }
+.filtros button.activo { background: var(--red); border-color: var(--red); color: #fff; }
+.filtros .count { margin-left: 0.4rem; font-size: 0.75rem; opacity: 0.8; }
+.album-info { margin-bottom: 1.5rem; }
+.album-info h2 { font-size: 2.2rem; margin-bottom: 0.2rem; }
+.panel-titulo { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.panel-titulo h2 { margin: 0; }
+.panel-titulo select { width: auto; }
+.lista-simple { display: grid; gap: 0.5rem; margin-top: 1.5rem; }
+.lista-simple > div { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+.admin-gallery figcaption select { padding: 0.4rem 0.6rem; font-size: 0.8rem; }
+
 /* Toast */
 .toast {
   position: fixed;
@@ -664,7 +742,8 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--red)
 .reveal.visible { opacity: 1; transform: none; }
 
 /* ========== Responsive ========== */
-@media (max-width: 900px) {
+/* Con 7 secciones el menú horizontal deja de entrar antes que el resto del diseño */
+@media (max-width: 1100px) {
   .menu-toggle { display: block; }
   .nav {
     position: fixed;
@@ -676,10 +755,14 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--red)
     border-bottom: 1px solid var(--border);
     transform: translateY(-120%);
     transition: transform 0.35s;
+    max-height: calc(100svh - var(--header-h));
+    overflow-y: auto;
   }
   .nav.open { transform: none; }
   .nav a:not(.btn) { padding: 0.9rem 1rem; }
   .nav .btn { margin: 0.5rem 0 0; }
+}
+@media (max-width: 900px) {
   .split, .profile, .contact, .admin-grid { grid-template-columns: 1fr; }
   .profile-photo { position: relative; top: 0; max-width: 420px; }
   .footer-grid { grid-template-columns: 1fr; }
@@ -698,6 +781,9 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--red)
   .dan { grid-template-columns: 70px 1fr; }
   .dan .when { grid-column: 2; font-size: 1.2rem; }
   .lightbox { padding: 3.5rem 0.5rem; }
+  .evento { grid-template-columns: 60px 1fr; }
+  .evento-acciones, .archivo-acciones { grid-column: 1 / -1; justify-content: flex-start; }
+  .archivo { grid-template-columns: 48px 1fr; }
   .clase { grid-template-columns: 76px 1fr; }
   .clase-acciones { grid-column: 1 / -1; justify-content: stretch; }
   .clase-acciones .btn-asistencia { flex: 1; }

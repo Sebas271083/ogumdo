@@ -1,7 +1,7 @@
 // Títulos y descripciones de cada página. Lo usa el navegador (useSeo) y también el backend
 // al renderizar en el servidor, así Google ve el mismo texto que el visitante.
 
-export const RUTAS_PUBLICAS = ['/', '/historia', '/profesor', '/galeria', '/contacto']
+export const RUTAS_PUBLICAS = ['/', '/historia', '/profesor', '/galeria', '/calendario', '/descargas', '/contacto']
 
 export function metaDeRuta(pathname, escuela = {}) {
   const nombre = escuela.nombre || 'Ogum Do Taekwondo'
@@ -25,6 +25,15 @@ export function metaDeRuta(pathname, escuela = {}) {
     '/galeria': {
       titulo: `Fotos de clases, exámenes y torneos | ${nombre}`,
       descripcion: `Galería de ${nombre}: entrenamientos, exámenes de graduación y torneos de taekwondo en ${zona}.`,
+    },
+    '/calendario': {
+      titulo: `Calendario: exámenes, torneos y fechas importantes | ${nombre}`,
+      descripcion: `Próximos exámenes de graduación, torneos, seminarios y fechas importantes de ${nombre}.`,
+    },
+    '/descargas': {
+      titulo: `Descargas: reglamentos, historia y terminología del Taekwondo | ${nombre}`,
+      descripcion:
+        'Material para descargar: historia del taekwondo, reglamentos de arbitraje, traducciones y terminología coreana, poomsae y más.',
     },
     '/contacto': {
       titulo: `Contacto y horarios – Taekwondo en ${zona} | ${nombre}`,

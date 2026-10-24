@@ -29,6 +29,31 @@ if (!existentes.length) {
 }
 await conexion.query(`USE \`${database}\``);
 await conexion.query(await fs.readFile(SCHEMA_PATH, "utf8"));
+
+// ===== Migraciones: columnas nuevas en tablas que ya existían =====
+// (CREATE TABLE IF NOT EXISTS no modifica tablas existentes, y MySQL no tiene ADD COLUMN IF NOT EXISTS)
+async function asegurarColumna(tabla, columna, definicion) {
+  const [existe] = await conexion.query(
+    "SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND COLUMN_NAME = ?",
+    [database, tabla, columna]
+  );
+  if (existe.length) return;
+  await conexion.query(`ALTER TABLE \`${tabla}\` ADD COLUMN ${definicion}`);
+  console.log(`Migración: columna ${tabla}.${columna} agregada.`);
+}
+
+await asegurarColumna("galeria", "album_id", "album_id INT NULL");
+const [fk] = await conexion.query(
+  `SELECT 1 FROM information_schema.KEY_COLUMN_USAGE
+   WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'galeria' AND COLUMN_NAME = 'album_id' AND REFERENCED_TABLE_NAME = 'albumes'`,
+  [database]
+);
+if (!fk.length) {
+  await conexion.query(
+    "ALTER TABLE galeria ADD CONSTRAINT fk_galeria_album FOREIGN KEY (album_id) REFERENCES albumes(id) ON DELETE SET NULL"
+  );
+}
+
 await conexion.end();
 console.log(`Base "${database}" y tablas listas.`);
 

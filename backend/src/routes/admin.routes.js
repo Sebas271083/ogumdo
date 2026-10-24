@@ -9,6 +9,10 @@ import {
   eliminarRegistro,
   subirFotos,
   eliminarFoto,
+  cambiarAlbumFoto,
+  nuevoAlbum,
+  editarAlbum,
+  eliminarAlbum,
   mensajes,
   editarMensaje,
   eliminarMensaje,
@@ -29,7 +33,12 @@ adminRouter.post("/admin/alumnos/:id/registros", uploadDiploma.single("archivo")
 adminRouter.delete("/admin/registros/:id", eliminarRegistro);
 
 adminRouter.post("/admin/galeria", uploadFoto.array("fotos", 30), subirFotos);
+adminRouter.patch("/admin/galeria/:id", cambiarAlbumFoto);
 adminRouter.delete("/admin/galeria/:id", eliminarFoto);
+
+adminRouter.post("/admin/albumes", nuevoAlbum);
+adminRouter.put("/admin/albumes/:id", editarAlbum);
+adminRouter.delete("/admin/albumes/:id", eliminarAlbum);
 
 adminRouter.get("/admin/mensajes", mensajes);
 adminRouter.patch("/admin/mensajes/:id", editarMensaje);

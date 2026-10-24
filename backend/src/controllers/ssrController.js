@@ -3,7 +3,9 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { FRONTEND_DIST, FRONTEND_SSR } from "../config/paths.js";
 import { leerContenido } from "../services/contenidoService.js";
-import { listarFotos } from "../services/galeriaService.js";
+import { listarFotos, listarAlbumes } from "../services/galeriaService.js";
+import { listarDescargas } from "../services/descargasService.js";
+import { listarEventos } from "../services/eventosService.js";
 import { SITE_URL, headHtml } from "../services/seoService.js";
 
 // Se cargan una sola vez: el bundle de React para servidor y el index.html del build
@@ -22,15 +24,26 @@ async function cargarSsr() {
 
 const serializar = (datos) => JSON.stringify(datos).replace(/</g, "\\u003c");
 
-// Si MySQL no responde, la página igual se renderiza (sin fotos)
-async function fotosSinFallar() {
+// Si MySQL no responde, la página igual se renderiza (sin fotos, descargas ni eventos)
+async function sinFallar(consulta, siFalla) {
   try {
-    return await listarFotos();
+    return await consulta();
   } catch (err) {
-    console.error("SSR: no se pudo leer la galería", err.message);
-    return [];
+    console.error("SSR: no se pudo leer de la base", err.message);
+    return siFalla;
   }
 }
+
+// Solo lo público: el HTML del servidor es igual para todos los visitantes
+const datosPublicos = async () => {
+  const [galeria, albumes, descargas, calendario] = await Promise.all([
+    sinFallar(() => listarFotos(), []),
+    sinFallar(() => listarAlbumes(), []),
+    sinFallar(() => listarDescargas({ soloPublicas: true }), []),
+    sinFallar(() => listarEventos({ soloPublicos: true }), null),
+  ]);
+  return { galeria, albumes, descargas, calendario };
+};
 
 // Las replace usan función: con un string, "$&" o "$'" dentro del HTML se interpretarían como patrones
 function armarHtml({ head, html, datos }) {
@@ -56,7 +69,7 @@ export async function pagina(req, res, next) {
     // Login y paneles dependen de la sesión: se arman en el navegador y no se indexan
     const renderizar = RUTAS_PUBLICAS.includes(pathname) || meta.noEncontrada;
     const datos = renderizar
-      ? { escuela, profesor: await leerContenido("profesor"), galeria: await fotosSinFallar() }
+      ? { escuela, profesor: await leerContenido("profesor"), ...(await datosPublicos()) }
       : { escuela };
 
     let html = "";

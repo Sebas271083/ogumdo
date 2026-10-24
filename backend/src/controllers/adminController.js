@@ -18,7 +18,17 @@ import {
 import { borrarSesionesDeUsuario } from "../services/sesionesService.js";
 import { clasesDeAlumno, asignarClases } from "../services/clasesService.js";
 import { listarMensajes, marcarLeido, borrarMensaje } from "../services/mensajesService.js";
-import { crearFotos, getFoto, borrarFoto } from "../services/galeriaService.js";
+import {
+  crearFotos,
+  getFoto,
+  borrarFoto,
+  moverFoto,
+  existeAlbum,
+  crearAlbum,
+  actualizarAlbum,
+  borrarAlbum,
+} from "../services/galeriaService.js";
+import { esFechaIso } from "../utils/fechas.js";
 import { borrarArchivo } from "../middleware/upload.js";
 import { httpError } from "../utils/httpError.js";
 
@@ -142,11 +152,70 @@ export async function eliminarRegistro(req, res, next) {
 
 // ===== Galería =====
 
+// "" / null / "dojang" = fotos generales (sin álbum)
+async function albumValido(valor) {
+  if (!valor || valor === "dojang") return null;
+  const id = Number(valor);
+  if (!(await existeAlbum(id))) throw httpError(400, "El álbum no existe");
+  return id;
+}
+
 export async function subirFotos(req, res, next) {
   try {
     if (!req.files?.length) throw httpError(400, "Elegí al menos una foto");
-    await crearFotos(String(req.body?.titulo ?? "").trim().slice(0, 150), req.files.map((f) => f.filename));
+    const albumId = await albumValido(req.body?.album_id);
+    await crearFotos(String(req.body?.titulo ?? "").trim().slice(0, 150), req.files.map((f) => f.filename), albumId);
     res.status(201).json({ ok: true, cantidad: req.files.length });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function cambiarAlbumFoto(req, res, next) {
+  try {
+    const foto = await getFoto(Number(req.params.id));
+    if (!foto) return res.status(404).json({ error: "Foto no encontrada" });
+    await moverFoto(foto.id, await albumValido(req.body?.album_id));
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+}
+
+function datosAlbum(body) {
+  const datos = {
+    nombre: String(body?.nombre ?? "").trim(),
+    descripcion: String(body?.descripcion ?? "").trim().slice(0, 300),
+    fecha: body?.fecha || null,
+  };
+  if (!datos.nombre || datos.nombre.length > 120) throw httpError(400, "El nombre es obligatorio (máx. 120 caracteres)");
+  if (datos.fecha && !esFechaIso(datos.fecha)) throw httpError(400, "Fecha inválida");
+  return datos;
+}
+
+export async function nuevoAlbum(req, res, next) {
+  try {
+    res.status(201).json({ id: await crearAlbum(datosAlbum(req.body)) });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function editarAlbum(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+    if (!(await existeAlbum(id))) return res.status(404).json({ error: "Álbum no encontrado" });
+    await actualizarAlbum(id, datosAlbum(req.body));
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function eliminarAlbum(req, res, next) {
+  try {
+    await borrarAlbum(Number(req.params.id));
+    res.json({ ok: true });
   } catch (err) {
     next(err);
   }

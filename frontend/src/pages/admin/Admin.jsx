@@ -3,13 +3,17 @@ import { getMensajes } from '../../api/client'
 import CambiarPassword from '../../components/CambiarPassword'
 import AdminAlumnos from './AdminAlumnos'
 import AdminClases from './AdminClases'
+import AdminCalendario from './AdminCalendario'
+import AdminDescargas from './AdminDescargas'
 import AdminGaleria from './AdminGaleria'
 import AdminMensajes from './AdminMensajes'
 
 const VISTAS = [
   ['clases', 'Clases y avisos'],
+  ['calendario', 'Calendario'],
   ['alumnos', 'Alumnos'],
   ['galeria', 'Galería'],
+  ['descargas', 'Descargas'],
   ['mensajes', 'Mensajes'],
   ['cuenta', 'Mi cuenta'],
 ]
@@ -50,8 +54,10 @@ export default function Admin() {
       <section className="admin-section">
         <div className="container">
           {vista === 'clases' && <AdminClases />}
+          {vista === 'calendario' && <AdminCalendario />}
           {vista === 'alumnos' && <AdminAlumnos />}
           {vista === 'galeria' && <AdminGaleria />}
+          {vista === 'descargas' && <AdminDescargas />}
           {vista === 'mensajes' && <AdminMensajes mensajes={mensajes} onCambio={recargarMensajes} />}
           {vista === 'cuenta' && (
             <div className="panel" style={{ maxWidth: 560 }}>

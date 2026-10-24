@@ -1,5 +1,5 @@
 import { leerContenido } from "../services/contenidoService.js";
-import { listarFotos, getFoto } from "../services/galeriaService.js";
+import { listarFotos, listarAlbumes, getFoto } from "../services/galeriaService.js";
 import { crearMensaje } from "../services/mensajesService.js";
 import { enviarArchivo } from "../middleware/upload.js";
 
@@ -24,6 +24,14 @@ export async function profesor(req, res, next) {
 export async function galeria(req, res, next) {
   try {
     res.json(await listarFotos(req.query));
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function albumes(req, res, next) {
+  try {
+    res.json(await listarAlbumes());
   } catch (err) {
     next(err);
   }
