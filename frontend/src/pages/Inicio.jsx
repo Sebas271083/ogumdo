@@ -29,12 +29,13 @@ const BENEFICIOS = [
     icono: <path d="M22 12h-4l-3 9L9 3l-3 9H2" />,
   },
   {
-    titulo: 'Competencia',
-    texto: 'Equipo de combate y poomsae que participa en torneos regionales y nacionales.',
+    titulo: 'Para chicos y grandes',
+    texto: 'Clases infantiles y de adultos: nunca es tarde ni demasiado temprano para empezar.',
     icono: (
       <>
-        <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z" />
-        <path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3" />
+        <circle cx="9" cy="7" r="3" />
+        <circle cx="17" cy="9" r="2" />
+        <path d="M3 21v-2a5 5 0 0 1 10 0v2M14 21v-1a3 3 0 0 1 6 0v1" />
       </>
     ),
   },

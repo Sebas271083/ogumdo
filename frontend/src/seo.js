@@ -11,7 +11,7 @@ export function metaDeRuta(pathname, escuela = {}) {
   const metas = {
     '/': {
       titulo: `Clases de Taekwondo en ${zona} | ${nombre}`,
-      descripcion: `Escuela de taekwondo en ${zona}. Clases para niños, adolescentes y adultos, exámenes de graduación y competencia. ¡Tu primera clase es gratis!`,
+      descripcion: `Escuela de taekwondo en ${zona}. Clases infantiles y de adultos con un Sabonim 6° Dan y más de 20 años de trayectoria. ¡Tu primera clase es gratis!`,
     },
     '/historia': {
       titulo: `Historia del Taekwondo: orígenes, filosofía y cinturones | ${nombre}`,

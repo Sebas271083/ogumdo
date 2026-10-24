@@ -11,24 +11,19 @@
     "localidad": "Ciudad Autónoma de Buenos Aires",
     "pais": "AR"
   },
-  "telefono": "+54 11 1234-5678",
-  "whatsapp": "5491112345678",
-  "email": "contacto@tuescuela.com",
+  "telefono": "+54 11 3698-5441",
+  "whatsapp": "5491136985441",
   "redes": {
-    "instagram": "https://instagram.com/",
-    "facebook": "https://facebook.com/",
-    "youtube": "https://youtube.com/"
+    "instagram": "https://www.instagram.com/taekwondo_ogumdo/"
   },
   "estadisticas": [
     { "valor": "20+", "etiqueta": "Años de trayectoria" },
-    { "valor": "150", "etiqueta": "Alumnos activos" },
-    { "valor": "80+", "etiqueta": "Cinturones negros formados" },
-    { "valor": "300+", "etiqueta": "Medallas en torneos" }
+    { "valor": "6° Dan", "etiqueta": "Grado del Sabonim" },
+    { "valor": "WT", "etiqueta": "Taekwondo olímpico (Kukkiwon)" },
+    { "valor": "1ª clase", "etiqueta": "Gratis para probar" }
   ],
   "horarios": [
-    { "id": "infantiles", "clase": "Infantiles (4 a 7 años)", "diasSemana": [1, 3], "inicio": "17:30", "fin": "18:30" },
-    { "id": "ninos", "clase": "Niños (8 a 13 años)", "diasSemana": [1, 3, 5], "inicio": "18:30", "fin": "19:30" },
-    { "id": "adultos", "clase": "Adolescentes y adultos", "diasSemana": [2, 4], "inicio": "19:30", "fin": "21:00" },
-    { "id": "competencia", "clase": "Equipo de competencia", "diasSemana": [6], "inicio": "10:00", "fin": "12:00" }
+    { "id": "infantiles", "clase": "Infantiles", "diasSemana": [1, 3], "inicio": "18:30", "fin": "19:30" },
+    { "id": "adultos", "clase": "Adultos", "diasSemana": [1, 3, 5], "inicio": "19:30", "fin": "21:00" }
   ]
 }
