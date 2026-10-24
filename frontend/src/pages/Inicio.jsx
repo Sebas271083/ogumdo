@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { getGaleria } from '../api/client'
+import { getDestacadas, getGaleria } from '../api/client'
 import { useEscuela } from '../context/EscuelaContext'
 import { useDatosIniciales } from '../context/DatosContext'
 import { diasTexto, rangoHorario } from '../utils/format'
@@ -54,14 +54,21 @@ function BannerMedia({ src }) {
 
 export default function Inicio() {
   const escuela = useEscuela()
-  const { galeria } = useDatosIniciales()
+  const { galeria, destacadas: destacadasIniciales } = useDatosIniciales()
   const [fotos, setFotos] = useState(galeria?.slice(0, 8) ?? [])
+  const [destacadas, setDestacadas] = useState(destacadasIniciales ?? {})
 
   useEffect(() => {
     getGaleria({ limit: 8 })
       .then(setFotos)
       .catch(() => {})
+    getDestacadas()
+      .then(setDestacadas)
+      .catch(() => {})
   }, [])
+
+  // La que eligió el Sabonim; si no eligió ninguna, la más reciente de la galería
+  const fotoPortada = destacadas.inicio?.url || fotos[0]?.url || '/img/profesor/placeholder.svg'
 
   return (
     <>
@@ -150,7 +157,7 @@ export default function Inicio() {
             </Link>
           </Reveal>
           <Reveal className="split-media">
-            <img src={fotos[0]?.url || '/img/profesor/placeholder.svg'} alt="Entrenamiento de taekwondo" />
+            <img src={fotoPortada} alt="Entrenamiento de taekwondo" />
           </Reveal>
         </div>
       </section>

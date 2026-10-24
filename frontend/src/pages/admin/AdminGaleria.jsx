@@ -1,5 +1,20 @@
 import { useCallback, useEffect, useState } from 'react'
-import { borrarAlbum, borrarFoto, crearAlbum, getAlbumes, getGaleria, moverFoto, subirFotos } from '../../api/client'
+import {
+  borrarAlbum,
+  borrarFoto,
+  crearAlbum,
+  elegirDestacada,
+  getAlbumes,
+  getDestacadas,
+  getGaleria,
+  moverFoto,
+  subirFotos,
+} from '../../api/client'
+
+const LUGARES = [
+  ['inicio', 'Inicio'],
+  ['historia', 'Historia'],
+]
 import { useToast } from '../../context/ToastContext'
 import { fecha } from '../../utils/format'
 
@@ -22,8 +37,23 @@ export default function AdminGaleria() {
   const [albumes, setAlbumes] = useState([])
   const [subiendo, setSubiendo] = useState(false)
   const [filtro, setFiltro] = useState('todas')
+  const [destacadas, setDestacadas] = useState({})
 
-  const recargar = useCallback(() => Promise.all([getGaleria().then(setFotos), getAlbumes().then(setAlbumes)]), [])
+  const recargar = useCallback(
+    () =>
+      Promise.all([getGaleria().then(setFotos), getAlbumes().then(setAlbumes), getDestacadas().then(setDestacadas)]),
+    [],
+  )
+
+  // Tocar la estrella de la foto ya elegida la quita (vuelve a la automática)
+  function destacar(lugar, foto) {
+    const yaEsta = destacadas[lugar]?.id === foto.id
+    const nombre = LUGARES.find(([id]) => id === lugar)[1]
+    ejecutar(
+      () => elegirDestacada(lugar, yaEsta ? null : foto.id),
+      yaEsta ? `${nombre}: vuelve a usar la foto más reciente` : `Foto elegida para ${nombre}`,
+    )
+  }
 
   useEffect(() => {
     recargar().catch(() => {})
@@ -75,6 +105,36 @@ export default function AdminGaleria() {
 
   return (
     <>
+      <div className="panel">
+        <h2>Fotos de Inicio e Historia</h2>
+        <p className="muted">
+          Tocá <strong>★ Inicio</strong> o <strong>★ Historia</strong> en cualquier foto de abajo para elegir cuál se muestra en
+          esas páginas. Si no elegís ninguna, se usa la más reciente.
+        </p>
+        <div className="destacadas">
+          {LUGARES.map(([lugar, nombre]) => (
+            <figure key={lugar}>
+              {destacadas[lugar] ? (
+                <img src={destacadas[lugar].url} alt={`Foto de ${nombre}`} />
+              ) : (
+                <div className="destacada-auto">Automática</div>
+              )}
+              <figcaption>
+                <strong>{nombre}</strong>
+                {destacadas[lugar] && (
+                  <button
+                    className="btn btn-sm btn-dark"
+                    onClick={() => ejecutar(() => elegirDestacada(lugar, null), `${nombre}: vuelve a usar la foto más reciente`)}
+                  >
+                    Usar automática
+                  </button>
+                )}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+
       <div className="panel">
         <h2>Álbumes de eventos</h2>
         <p className="muted">Agrupá las fotos de un examen, torneo o evento. Las fotos sin álbum quedan en “Dojang”.</p>
@@ -162,6 +222,18 @@ export default function AdminGaleria() {
                 <img src={f.url} alt={f.titulo || ''} loading="lazy" />
                 <figcaption>
                   <span>{f.titulo || 'Sin descripción'}</span>
+                  <div className="botones-destacar">
+                    {LUGARES.map(([lugar, nombre]) => (
+                      <button
+                        key={lugar}
+                        className={`btn-destacar ${destacadas[lugar]?.id === f.id ? 'activo' : ''}`}
+                        onClick={() => destacar(lugar, f)}
+                        title={`Mostrar esta foto en ${nombre}`}
+                      >
+                        ★ {nombre}
+                      </button>
+                    ))}
+                  </div>
                   <select
                     value={f.albumId ?? 'dojang'}
                     onChange={(ev) => ejecutar(() => moverFoto(f.id, ev.target.value), 'Foto movida')}

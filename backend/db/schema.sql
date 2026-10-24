@@ -121,6 +121,12 @@ CREATE TABLE IF NOT EXISTS galeria (
   FOREIGN KEY (album_id) REFERENCES albumes(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Ajustes del sitio que edita el Sabonim desde el panel (ej: foto_inicio, foto_historia = id de galeria)
+CREATE TABLE IF NOT EXISTS ajustes (
+  clave  VARCHAR(50) PRIMARY KEY,
+  valor  VARCHAR(255) NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Archivos para descargar (reglamentos, historia, traducciones...)
 CREATE TABLE IF NOT EXISTS descargas (
   id              INT PRIMARY KEY AUTO_INCREMENT,

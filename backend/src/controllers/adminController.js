@@ -27,6 +27,8 @@ import {
   crearAlbum,
   actualizarAlbum,
   borrarAlbum,
+  LUGARES_DESTACADOS,
+  setFotoDestacada,
 } from "../services/galeriaService.js";
 import { esFechaIso } from "../utils/fechas.js";
 import { borrarArchivo } from "../middleware/upload.js";
@@ -176,6 +178,20 @@ export async function cambiarAlbumFoto(req, res, next) {
     const foto = await getFoto(Number(req.params.id));
     if (!foto) return res.status(404).json({ error: "Foto no encontrada" });
     await moverFoto(foto.id, await albumValido(req.body?.album_id));
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Elige la foto de la portada o de Historia. foto_id null = automática (la más reciente)
+export async function elegirFotoDestacada(req, res, next) {
+  try {
+    const { lugar } = req.params;
+    if (!LUGARES_DESTACADOS.includes(lugar)) throw httpError(404, "Lugar inválido");
+    const fotoId = req.body?.foto_id == null ? null : Number(req.body.foto_id);
+    if (fotoId !== null && !(await getFoto(fotoId))) throw httpError(404, "Foto no encontrada");
+    await setFotoDestacada(lugar, fotoId);
     res.json({ ok: true });
   } catch (err) {
     next(err);

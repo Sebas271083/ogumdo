@@ -41,6 +41,33 @@ export async function borrarFoto(id) {
   await pool.query("DELETE FROM galeria WHERE id = ?", [id]);
 }
 
+// ===== Fotos destacadas (la imagen de la portada y la de Historia) =====
+
+export const LUGARES_DESTACADOS = ["inicio", "historia"];
+
+// { inicio: { id, url } | null, historia: ... }. El JOIN descarta fotos que ya se borraron.
+export async function getFotosDestacadas() {
+  const [rows] = await pool.query(
+    `SELECT a.clave, g.id FROM ajustes a JOIN galeria g ON g.id = a.valor
+     WHERE a.clave IN (?)`,
+    [LUGARES_DESTACADOS.map((l) => `foto_${l}`)]
+  );
+  return Object.fromEntries(
+    LUGARES_DESTACADOS.map((lugar) => {
+      const fila = rows.find((r) => r.clave === `foto_${lugar}`);
+      return [lugar, fila ? { id: fila.id, url: `/api/galeria/${fila.id}/imagen` } : null];
+    })
+  );
+}
+
+// fotoId null = volver a la elección automática
+export async function setFotoDestacada(lugar, fotoId) {
+  await pool.query(
+    "INSERT INTO ajustes (clave, valor) VALUES (?, ?) ON DUPLICATE KEY UPDATE valor = VALUES(valor)",
+    [`foto_${lugar}`, fotoId === null ? null : String(fotoId)]
+  );
+}
+
 // ===== Álbumes =====
 
 // Con cantidad de fotos y la más reciente como portada

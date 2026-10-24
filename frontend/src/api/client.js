@@ -35,6 +35,7 @@ export const getGaleria = (params = {}) => request(`/galeria?${new URLSearchPara
 export const enviarContacto = (datos) => request('/contacto', { method: 'POST', body: json(datos) })
 
 export const getAlbumes = () => request('/albumes')
+export const getDestacadas = () => request('/galeria/destacadas')
 export const getDescargas = () => request('/descargas')
 export const getEventos = () => request('/eventos')
 
@@ -73,6 +74,9 @@ export const borrarRegistro = (id) => request(`/admin/registros/${id}`, { method
 export const subirFotos = (formData) => request('/admin/galeria', { method: 'POST', body: formData })
 export const borrarFoto = (id) => request(`/admin/galeria/${id}`, { method: 'DELETE' })
 export const moverFoto = (id, albumId) => request(`/admin/galeria/${id}`, { method: 'PATCH', body: json({ album_id: albumId }) })
+// lugar: "inicio" | "historia". fotoId null = volver a la automática
+export const elegirDestacada = (lugar, fotoId) =>
+  request(`/admin/galeria/destacadas/${lugar}`, { method: 'PUT', body: json({ foto_id: fotoId }) })
 export const crearAlbum = (datos) => request('/admin/albumes', { method: 'POST', body: json(datos) })
 export const borrarAlbum = (id) => request(`/admin/albumes/${id}`, { method: 'DELETE' })
 

@@ -3,7 +3,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { FRONTEND_DIST, FRONTEND_SSR } from "../config/paths.js";
 import { leerContenido } from "../services/contenidoService.js";
-import { listarFotos, listarAlbumes } from "../services/galeriaService.js";
+import { listarFotos, listarAlbumes, getFotosDestacadas } from "../services/galeriaService.js";
 import { listarDescargas } from "../services/descargasService.js";
 import { listarEventos } from "../services/eventosService.js";
 import { SITE_URL, headHtml } from "../services/seoService.js";
@@ -36,13 +36,14 @@ async function sinFallar(consulta, siFalla) {
 
 // Solo lo público: el HTML del servidor es igual para todos los visitantes
 const datosPublicos = async () => {
-  const [galeria, albumes, descargas, calendario] = await Promise.all([
+  const [galeria, albumes, descargas, calendario, destacadas] = await Promise.all([
     sinFallar(() => listarFotos(), []),
     sinFallar(() => listarAlbumes(), []),
     sinFallar(() => listarDescargas({ soloPublicas: true }), []),
     sinFallar(() => listarEventos({ soloPublicos: true }), null),
+    sinFallar(() => getFotosDestacadas(), {}),
   ]);
-  return { galeria, albumes, descargas, calendario };
+  return { galeria, albumes, descargas, calendario, destacadas };
 };
 
 // Las replace usan función: con un string, "$&" o "$'" dentro del HTML se interpretarían como patrones

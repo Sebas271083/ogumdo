@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getGaleria } from '../api/client'
+import { getDestacadas, getGaleria } from '../api/client'
 import { useDatosIniciales } from '../context/DatosContext'
 import { CINTURONES } from '../utils/cinturones'
 import Cinturon from '../components/Cinturon'
@@ -85,12 +85,13 @@ const COLORES = [
 ]
 
 export default function Historia() {
-  const { galeria } = useDatosIniciales()
-  const [foto, setFoto] = useState(galeria?.[1] || galeria?.[0] || null)
+  const { galeria, destacadas } = useDatosIniciales()
+  // La que eligió el Sabonim; si no eligió ninguna, la segunda más reciente (la primera ya está en la portada)
+  const [foto, setFoto] = useState(destacadas?.historia || galeria?.[1] || galeria?.[0] || null)
 
   useEffect(() => {
-    getGaleria({ limit: 2 })
-      .then((f) => setFoto(f[1] || f[0] || null))
+    Promise.all([getDestacadas(), getGaleria({ limit: 2 })])
+      .then(([d, f]) => setFoto(d.historia || f[1] || f[0] || null))
       .catch(() => {})
   }, [])
 

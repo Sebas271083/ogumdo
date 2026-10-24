@@ -13,6 +13,7 @@ import {
   nuevoAlbum,
   editarAlbum,
   eliminarAlbum,
+  elegirFotoDestacada,
   mensajes,
   editarMensaje,
   eliminarMensaje,
@@ -35,6 +36,8 @@ adminRouter.delete("/admin/registros/:id", eliminarRegistro);
 adminRouter.post("/admin/galeria", uploadFoto.array("fotos", 30), subirFotos);
 adminRouter.patch("/admin/galeria/:id", cambiarAlbumFoto);
 adminRouter.delete("/admin/galeria/:id", eliminarFoto);
+
+adminRouter.put("/admin/galeria/destacadas/:lugar", elegirFotoDestacada);
 
 adminRouter.post("/admin/albumes", nuevoAlbum);
 adminRouter.put("/admin/albumes/:id", editarAlbum);

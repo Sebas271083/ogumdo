@@ -707,6 +707,24 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--red)
 .lista-simple { display: grid; gap: 0.5rem; margin-top: 1.5rem; }
 .lista-simple > div { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
 .admin-gallery figcaption select { padding: 0.4rem 0.6rem; font-size: 0.8rem; }
+.botones-destacar { display: flex; gap: 0.4rem; }
+.btn-destacar {
+  flex: 1;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  font: 600 0.78rem var(--font-body);
+  padding: 0.4rem 0.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn-destacar:hover { color: var(--text); }
+.btn-destacar.activo { background: var(--gold); border-color: var(--gold); color: #111; }
+.destacadas { display: grid; grid-template-columns: repeat(2, minmax(0, 220px)); gap: 1rem; }
+.destacadas figure { margin: 0; background: var(--surface-2); border-radius: 10px; overflow: hidden; }
+.destacadas img, .destacada-auto { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.destacada-auto { display: grid; place-items: center; color: var(--muted); font-size: 0.9rem; border-bottom: 1px dashed var(--border); }
+.destacadas figcaption { padding: 0.6rem 0.75rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 
 /* Toast */
 .toast {
