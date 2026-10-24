@@ -322,7 +322,8 @@ tbody tr:hover { background: rgba(255, 255, 255, 0.02); }
 
 .admin-gallery { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 .admin-gallery figure { margin: 0; background: var(--surface-2); border-radius: 10px; overflow: hidden; }
-.admin-gallery img { aspect-ratio: 1; }
+/* height: auto pisa el 100% de .gallery img: si no, la foto ocupa toda la tarjeta y tapa los botones */
+.admin-gallery img { height: auto; aspect-ratio: 1; }
 .admin-gallery figcaption { padding: 0.6rem 0.75rem; display: grid; gap: 0.5rem; font-size: 0.85rem; color: var(--muted); }
 
 .lightbox {
