@@ -140,6 +140,19 @@ CREATE TABLE IF NOT EXISTS descargas (
   creado_ts       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Enlaces externos (videos de YouTube, artículos, reglamentos online...). Van en la página de Material;
+-- los marcados en_historia también se muestran en la página de Historia.
+CREATE TABLE IF NOT EXISTS enlaces (
+  id           INT PRIMARY KEY AUTO_INCREMENT,
+  titulo       VARCHAR(150) NOT NULL,
+  descripcion  VARCHAR(300) NULL,
+  url          VARCHAR(500) NOT NULL,
+  categoria    VARCHAR(40) NOT NULL DEFAULT 'otros',
+  publico      BOOLEAN NOT NULL DEFAULT TRUE,
+  en_historia  BOOLEAN NOT NULL DEFAULT FALSE,
+  creado_ts    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Calendario de fechas importantes
 CREATE TABLE IF NOT EXISTS eventos (
   id           INT PRIMARY KEY AUTO_INCREMENT,

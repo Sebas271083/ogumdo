@@ -6,6 +6,7 @@ import { leerContenido } from "../services/contenidoService.js";
 import { listarFotos, listarAlbumes, getFotosDestacadas } from "../services/galeriaService.js";
 import { listarDescargas } from "../services/descargasService.js";
 import { listarEventos } from "../services/eventosService.js";
+import { listarEnlaces } from "../services/enlacesService.js";
 import { SITE_URL, headHtml } from "../services/seoService.js";
 
 // Se cargan una sola vez: el bundle de React para servidor y el index.html del build
@@ -36,14 +37,15 @@ async function sinFallar(consulta, siFalla) {
 
 // Solo lo público: el HTML del servidor es igual para todos los visitantes
 const datosPublicos = async () => {
-  const [galeria, albumes, descargas, calendario, destacadas] = await Promise.all([
+  const [galeria, albumes, descargas, calendario, destacadas, enlaces] = await Promise.all([
     sinFallar(() => listarFotos(), []),
     sinFallar(() => listarAlbumes(), []),
     sinFallar(() => listarDescargas({ soloPublicas: true }), []),
     sinFallar(() => listarEventos({ soloPublicos: true }), null),
     sinFallar(() => getFotosDestacadas(), {}),
+    sinFallar(() => listarEnlaces({ soloPublicos: true }), []),
   ]);
-  return { galeria, albumes, descargas, calendario, destacadas };
+  return { galeria, albumes, descargas, calendario, destacadas, enlaces };
 };
 
 // Las replace usan función: con un string, "$&" o "$'" dentro del HTML se interpretarían como patrones

@@ -13,7 +13,7 @@ const VISTAS = [
   ['calendario', 'Calendario'],
   ['alumnos', 'Alumnos'],
   ['galeria', 'Galería'],
-  ['descargas', 'Descargas'],
+  ['descargas', 'Material'],
   ['mensajes', 'Mensajes'],
   ['cuenta', 'Mi cuenta'],
 ]

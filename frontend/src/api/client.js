@@ -37,6 +37,7 @@ export const enviarContacto = (datos) => request('/contacto', { method: 'POST', 
 export const getAlbumes = () => request('/albumes')
 export const getDestacadas = () => request('/galeria/destacadas')
 export const getDescargas = () => request('/descargas')
+export const getEnlaces = () => request('/enlaces')
 export const getEventos = () => request('/eventos')
 
 // Alumno
@@ -83,6 +84,10 @@ export const borrarAlbum = (id) => request(`/admin/albumes/${id}`, { method: 'DE
 export const subirDescarga = (formData) => request('/admin/descargas', { method: 'POST', body: formData })
 export const editarDescarga = (id, datos) => request(`/admin/descargas/${id}`, { method: 'PUT', body: json(datos) })
 export const borrarDescarga = (id) => request(`/admin/descargas/${id}`, { method: 'DELETE' })
+
+export const crearEnlace = (datos) => request('/admin/enlaces', { method: 'POST', body: json(datos) })
+export const editarEnlace = (id, datos) => request(`/admin/enlaces/${id}`, { method: 'PUT', body: json(datos) })
+export const borrarEnlace = (id) => request(`/admin/enlaces/${id}`, { method: 'DELETE' })
 
 export const crearEvento = (datos) => request('/admin/eventos', { method: 'POST', body: json(datos) })
 export const editarEvento = (id, datos) => request(`/admin/eventos/${id}`, { method: 'PUT', body: json(datos) })

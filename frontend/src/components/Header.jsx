@@ -9,7 +9,7 @@ export const LINKS = [
   ['/profesor', 'Sabonim'],
   ['/galeria', 'Galería'],
   ['/calendario', 'Calendario'],
-  ['/descargas', 'Descargas'],
+  ['/descargas', 'Material'],
   ['/contacto', 'Contacto'],
 ]
 

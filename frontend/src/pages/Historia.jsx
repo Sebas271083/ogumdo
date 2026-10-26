@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { getDestacadas, getGaleria } from '../api/client'
+import { getDestacadas, getEnlaces, getGaleria } from '../api/client'
+import { idYoutube } from '../utils/youtube'
+import VideoYoutube from '../components/VideoYoutube'
 import { useDatosIniciales } from '../context/DatosContext'
 import { CINTURONES } from '../utils/cinturones'
 import Cinturon from '../components/Cinturon'
@@ -85,13 +87,19 @@ const COLORES = [
 ]
 
 export default function Historia() {
-  const { galeria, destacadas } = useDatosIniciales()
+  const { galeria, destacadas, enlaces } = useDatosIniciales()
   // La que eligió el Sabonim; si no eligió ninguna, la segunda más reciente (la primera ya está en la portada)
   const [foto, setFoto] = useState(destacadas?.historia || galeria?.[1] || galeria?.[0] || null)
+  // Videos de YouTube que el Sabonim marcó "Mostrar en Historia"
+  const deHistoria = (lista = []) => lista.filter((e) => e.enHistoria && idYoutube(e.url))
+  const [videos, setVideos] = useState(deHistoria(enlaces))
 
   useEffect(() => {
     Promise.all([getDestacadas(), getGaleria({ limit: 2 })])
       .then(([d, f]) => setFoto(d.historia || f[1] || f[0] || null))
+      .catch(() => {})
+    getEnlaces()
+      .then((lista) => setVideos(deHistoria(lista)))
       .catch(() => {})
   }, [])
 
@@ -161,7 +169,29 @@ export default function Historia() {
         </div>
       </section>
 
-      <section>
+      {videos.length > 0 && (
+        <section>
+          <div className="container">
+            <Reveal className="section-head center">
+              <span className="eyebrow">Videos</span>
+              <h2>La historia en imágenes</h2>
+            </Reveal>
+            <div className="videos">
+              {videos.map((e) => (
+                <Reveal as="article" className="video-card" key={e.id}>
+                  <VideoYoutube id={idYoutube(e.url)} titulo={e.titulo} />
+                  <div>
+                    <h4>{e.titulo}</h4>
+                    {e.descripcion && <p className="muted">{e.descripcion}</p>}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className={videos.length > 0 ? 'section-alt' : ''}>
         <div className="container">
           <Reveal className="section-head center">
             <span className="eyebrow">Filosofía</span>
@@ -181,7 +211,7 @@ export default function Historia() {
         </div>
       </section>
 
-      <section className="section-alt">
+      <section className={videos.length > 0 ? '' : 'section-alt'}>
         <div className="container split">
           <Reveal>
             <span className="eyebrow">Grados</span>

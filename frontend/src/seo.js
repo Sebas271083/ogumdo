@@ -31,9 +31,9 @@ export function metaDeRuta(pathname, escuela = {}) {
       descripcion: `Próximos exámenes de graduación, torneos, seminarios y fechas importantes de ${nombre}.`,
     },
     '/descargas': {
-      titulo: `Descargas: reglamentos, historia y terminología del Taekwondo | ${nombre}`,
+      titulo: `Material de estudio: reglamentos, videos e historia del Taekwondo | ${nombre}`,
       descripcion:
-        'Material para descargar: historia del taekwondo, reglamentos de arbitraje, traducciones y terminología coreana, poomsae y más.',
+        'Historia del taekwondo, reglamentos de arbitraje, traducciones y terminología coreana, poomsae, videos y más material para descargar.',
     },
     '/contacto': {
       titulo: `Contacto y horarios – Taekwondo en ${zona} | ${nombre}`,

@@ -686,6 +686,35 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--red)
 .archivo-peso { font-size: 0.8rem; color: var(--muted); }
 .archivo-acciones { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
 
+.archivo-ext.ext-link { font-size: 1.4rem; }
+.categoria .videos { margin-bottom: 0.75rem; }
+
+/* ========== Videos de YouTube ========== */
+.videos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; }
+.video-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.video-card > div:last-child { padding: 0.9rem 1.1rem 1.1rem; }
+.video-card h4 { margin: 0; font-size: 1.02rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.video-card p { margin: 0.3rem 0 0; font-size: 0.9rem; }
+.video-card .archivo-acciones { justify-content: flex-start; margin-top: 0.75rem; }
+.video { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; border: 0; padding: 0; cursor: pointer; }
+.video img, .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; }
+.video-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 68px;
+  height: 48px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(227, 38, 59, 0.92);
+  color: #fff;
+  font-size: 1.3rem;
+  transition: transform 0.2s;
+}
+.video:hover .video-play { transform: scale(1.1); }
+
 /* ========== Galería por álbumes ========== */
 .filtros { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
 .filtros button {
