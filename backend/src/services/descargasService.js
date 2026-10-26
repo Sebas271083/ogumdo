@@ -2,6 +2,25 @@ import { pool } from "../config/db.js";
 
 export const CATEGORIAS_DESCARGA = ["historia", "reglamentos", "traducciones", "formas", "otros"];
 
+const NOMBRES_CATEGORIA = {
+  historia: "Historia y filosofía",
+  reglamentos: "Reglamentos",
+  traducciones: "Traducciones y terminología",
+  formas: "Poomsae y formas",
+  otros: "Otros",
+};
+
+// Notificación de material nuevo (archivo o enlace). tipo: "archivo" | "video" | "enlace"
+export function payloadMaterialNuevo({ id, titulo, categoria, tipo }) {
+  const que = { archivo: "Archivo para descargar", video: "Video", enlace: "Enlace" }[tipo];
+  return {
+    titulo: `📚 Nuevo material: ${titulo}`,
+    cuerpo: `${que} · ${NOMBRES_CATEGORIA[categoria] ?? "Otros"}. Tocá para verlo.`,
+    url: "/descargas",
+    tag: `material-${tipo}-${id}`,
+  };
+}
+
 const publicar = (d) => ({ ...d, publico: Boolean(d.publico), url: `/api/descargas/${d.id}/archivo` });
 
 // soloPublicas: para visitantes sin sesión

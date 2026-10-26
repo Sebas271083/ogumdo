@@ -1,5 +1,6 @@
 import { listarEnlaces, getEnlace, crearEnlace, actualizarEnlace, borrarEnlace } from "../services/enlacesService.js";
-import { CATEGORIAS_DESCARGA } from "../services/descargasService.js";
+import { CATEGORIAS_DESCARGA, payloadMaterialNuevo } from "../services/descargasService.js";
+import { enviarATodosLosAlumnos } from "../services/pushService.js";
 import { httpError } from "../utils/httpError.js";
 
 // Solo http/https: un "javascript:..." guardado como link sería un ataque a quien lo toque
@@ -37,9 +38,25 @@ export async function listar(req, res, next) {
   }
 }
 
+// Mismo criterio que el frontend (utils/youtube.js) para decidir si es un video
+const esYoutube = (url) => /^https?:\/\/(www\.|m\.|music\.)?(youtube\.com|youtube-nocookie\.com|youtu\.be)\//i.test(url);
+
 export async function crear(req, res, next) {
   try {
-    res.status(201).json({ id: await crearEnlace(datosEnlace(req.body)) });
+    const datos = datosEnlace(req.body);
+    const id = await crearEnlace(datos);
+    const enviados =
+      req.body?.notificar === true
+        ? await enviarATodosLosAlumnos(
+            payloadMaterialNuevo({
+              id,
+              titulo: datos.titulo,
+              categoria: datos.categoria,
+              tipo: esYoutube(datos.url) ? "video" : "enlace",
+            })
+          )
+        : 0;
+    res.status(201).json({ id, enviados });
   } catch (err) {
     next(err);
   }

@@ -5,7 +5,9 @@ import {
   crearDescarga,
   actualizarDescarga,
   borrarDescarga,
+  payloadMaterialNuevo,
 } from "../services/descargasService.js";
+import { enviarATodosLosAlumnos } from "../services/pushService.js";
 import { borrarArchivo, enviarArchivo } from "../middleware/upload.js";
 import { httpError } from "../utils/httpError.js";
 
@@ -46,13 +48,17 @@ export async function archivo(req, res, next) {
 export async function subir(req, res, next) {
   try {
     if (!req.file) throw httpError(400, "Elegí un archivo");
+    const datos = datosDescarga(req.body);
     const id = await crearDescarga({
-      ...datosDescarga(req.body),
+      ...datos,
       archivo: req.file.filename,
       archivoNombre: req.file.originalname,
       tamano: req.file.size,
     });
-    res.status(201).json({ id });
+    const enviados = esVerdadero(req.body?.notificar)
+      ? await enviarATodosLosAlumnos(payloadMaterialNuevo({ id, titulo: datos.titulo, categoria: datos.categoria, tipo: "archivo" }))
+      : 0;
+    res.status(201).json({ id, enviados });
   } catch (err) {
     next(err);
   }

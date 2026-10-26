@@ -14,6 +14,9 @@ import { CATEGORIAS_DESCARGA } from '../../utils/catalogos'
 import { idYoutube } from '../../utils/youtube'
 import { Archivo, Enlace, Video } from '../Descargas'
 
+const mensajePublicado = (base, notificar, enviados) =>
+  notificar ? `${base} · ${enviados} ${enviados === 1 ? 'notificación enviada' : 'notificaciones enviadas'}` : base
+
 function OpcionesCategoria() {
   return Object.entries(CATEGORIAS_DESCARGA).map(([id, c]) => (
     <option key={id} value={id}>
@@ -35,8 +38,14 @@ export default function AdminDescargas() {
     const form = ev.currentTarget
     const fd = new FormData(form)
     try {
-      await crearEnlace({ ...Object.fromEntries(fd), publico: fd.has('publico'), enHistoria: fd.has('enHistoria') })
-      toast('Enlace agregado')
+      const notificar = fd.has('notificar')
+      const { enviados } = await crearEnlace({
+        ...Object.fromEntries(fd),
+        publico: fd.has('publico'),
+        enHistoria: fd.has('enHistoria'),
+        notificar,
+      })
+      toast(mensajePublicado('Enlace agregado', notificar, enviados))
       form.reset()
       recargar()
     } catch (err) {
@@ -109,8 +118,9 @@ export default function AdminDescargas() {
     const form = ev.currentTarget
     setSubiendo(true)
     try {
-      await subirDescarga(new FormData(form))
-      toast('Archivo publicado')
+      const fd = new FormData(form)
+      const { enviados } = await subirDescarga(fd)
+      toast(mensajePublicado('Archivo publicado', fd.has('notificar'), enviados))
       form.reset()
       recargar()
     } catch (err) {
@@ -175,6 +185,10 @@ export default function AdminDescargas() {
             <input type="checkbox" name="publico" value="true" defaultChecked />
             Público (si lo desmarcás, solo lo ven los alumnos con sesión iniciada)
           </label>
+          <label className="check">
+            <input type="checkbox" name="notificar" value="true" defaultChecked />
+            Avisar a los alumnos con una notificación
+          </label>
           <div>
             <button className="btn btn-sm" type="submit" disabled={subiendo}>
               {subiendo ? 'Subiendo…' : 'Publicar'}
@@ -216,6 +230,10 @@ export default function AdminDescargas() {
           <label className="check">
             <input type="checkbox" name="enHistoria" />
             Mostrar también en la página de Historia (solo videos de YouTube públicos)
+          </label>
+          <label className="check">
+            <input type="checkbox" name="notificar" defaultChecked />
+            Avisar a los alumnos con una notificación
           </label>
           <div>
             <button className="btn btn-sm" type="submit">
