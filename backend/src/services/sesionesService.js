@@ -29,6 +29,11 @@ export async function borrarSesion(token) {
   await pool.query("DELETE FROM sesiones WHERE token_hash = ?", [sha256(token)]);
 }
 
+// Cierra todas las sesiones del usuario menos la actual (al cambiar la contraseña)
+export async function borrarOtrasSesiones(usuarioId, tokenActual) {
+  await pool.query("DELETE FROM sesiones WHERE usuario_id = ? AND token_hash <> ?", [usuarioId, sha256(tokenActual ?? "")]);
+}
+
 export async function borrarSesionesDeUsuario(usuarioId) {
   await pool.query("DELETE FROM sesiones WHERE usuario_id = ?", [usuarioId]);
 }

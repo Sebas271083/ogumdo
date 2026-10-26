@@ -58,5 +58,8 @@ export function enviarArchivo(res, nombre, { descarga, adjunto, cache } = {}) {
     headers["Content-Disposition"] = `${adjunto ? "attachment" : "inline"}; filename*=UTF-8''${encodeURIComponent(descarga)}`;
   }
   if (cache) headers["Cache-Control"] = "public, max-age=604800";
+  // La CSP de las páginas rompería el visor de PDF del navegador. Estos archivos igual no pueden
+  // ejecutarse: el tipo sale de la extensión que pone el servidor y va con X-Content-Type-Options.
+  res.removeHeader("Content-Security-Policy");
   res.sendFile(path.basename(nombre), { root: STORAGE_DIR, headers });
 }

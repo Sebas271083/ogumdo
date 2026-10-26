@@ -2,6 +2,7 @@ import { leerContenido } from "../services/contenidoService.js";
 import { listarFotos, listarAlbumes, getFoto, getFotosDestacadas } from "../services/galeriaService.js";
 import { crearMensaje } from "../services/mensajesService.js";
 import { enviarArchivo } from "../middleware/upload.js";
+import { crearLimitador } from "../utils/limitador.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -55,10 +56,16 @@ export async function imagenGaleria(req, res, next) {
   }
 }
 
+// Para que un bot no llene la base de mensajes: 5 por hora por IP
+const limiteContacto = crearLimitador({ max: 5, ventanaMs: 60 * 60 * 1000 });
+
 export async function contacto(req, res, next) {
   try {
     const b = req.body ?? {};
     if (b.web) return res.json({ ok: true }); // honeypot: los bots completan el campo oculto
+    if (limiteContacto.bloqueado(req.ip)) {
+      return res.status(429).json({ error: "Ya enviaste varios mensajes. Si es urgente, escribinos por WhatsApp." });
+    }
 
     const datos = {
       nombre: String(b.nombre ?? "").trim(),
@@ -74,6 +81,7 @@ export async function contacto(req, res, next) {
     if (errores.length) return res.status(400).json({ errores });
 
     await crearMensaje(datos);
+    limiteContacto.sumar(req.ip);
     res.status(201).json({ ok: true });
   } catch (err) {
     next(err);

@@ -59,6 +59,8 @@ function datosAlumno(body, { passwordObligatoria }) {
   if ((passwordObligatoria || datos.password) && datos.password.length < 8) {
     throw httpError(400, "La contraseña debe tener al menos 8 caracteres");
   }
+  if (Buffer.byteLength(datos.password) > 72) throw httpError(400, "La contraseña es demasiado larga");
+  if (datos.nombre.length > 120 || datos.email.length > 150) throw httpError(400, "Nombre o email demasiado largo");
   return datos;
 }
 

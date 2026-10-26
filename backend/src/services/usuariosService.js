@@ -8,10 +8,15 @@ const nulo = (v) => (v === undefined || v === "" ? null : v);
 
 export const hashPassword = (password) => bcrypt.hash(password, 10);
 
+// Hash de relleno: si el email no existe igual se compara contra algo, así la respuesta tarda lo
+// mismo y no se puede averiguar qué emails están registrados midiendo el tiempo.
+const HASH_RELLENO = bcrypt.hashSync("relleno-que-nunca-coincide", 10);
+
 export async function verificarCredenciales(email, password) {
   const [rows] = await pool.query("SELECT * FROM usuarios WHERE email = ?", [email]);
   const u = rows[0];
-  if (!u || !(await bcrypt.compare(password, u.password_hash))) return null;
+  const coincide = await bcrypt.compare(password, u?.password_hash ?? HASH_RELLENO);
+  if (!u || !coincide) return null;
   const { password_hash, ...publico } = u;
   return publico;
 }

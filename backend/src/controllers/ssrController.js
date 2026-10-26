@@ -49,20 +49,22 @@ const datosPublicos = async () => {
 };
 
 // Las replace usan función: con un string, "$&" o "$'" dentro del HTML se interpretarían como patrones
-function armarHtml({ head, html, datos }) {
+// nonce: el mismo de la cabecera Content-Security-Policy, para que el navegador acepte este script
+function armarHtml({ head, html, datos, nonce }) {
   return template
     .replace("<!--app-head-->", () => head)
     .replace("<!--app-html-->", () => html)
-    .replace("<!--app-datos-->", () => `<script>window.__DATOS__=${serializar(datos)}</script>`);
+    .replace("<!--app-datos-->", () => `<script nonce="${nonce}">window.__DATOS__=${serializar(datos)}</script>`);
 }
 
 export async function pagina(req, res, next) {
   try {
     const { render, metaDeRuta, RUTAS_PUBLICAS } = await cargarSsr();
 
-    // Una sola URL por página: /historia/ redirige a /historia
+    // Una sola URL por página: /historia/ redirige a /historia. Se arma desde una sola "/" para
+    // que algo como "//otro-sitio.com/" nunca termine redirigiendo a otro dominio.
     if (req.path.length > 1 && req.path.endsWith("/")) {
-      return res.redirect(301, req.path.replace(/\/+$/, "") || "/");
+      return res.redirect(301, `/${req.path.replace(/^[/\\]+/, "").replace(/\/+$/, "")}`);
     }
 
     const pathname = req.path;
@@ -88,7 +90,7 @@ export async function pagina(req, res, next) {
     res
       .status(meta.noEncontrada ? 404 : 200)
       .type("html")
-      .send(armarHtml({ head: headHtml({ meta, pathname, escuela }), html, datos }));
+      .send(armarHtml({ head: headHtml({ meta, pathname, escuela }), html, datos, nonce: res.locals.nonce }));
   } catch (err) {
     next(err);
   }
