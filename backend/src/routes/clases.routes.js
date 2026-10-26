@@ -5,6 +5,7 @@ import {
   avisos,
   cancelar,
   reactivar,
+  recordar,
   publicarAviso,
   eliminarAviso,
 } from "../controllers/clasesController.js";
@@ -17,5 +18,6 @@ clasesRouter.get("/avisos", requireAuth, avisos);
 
 clasesRouter.post("/admin/clases/:claseId/:fecha/cancelacion", requireAdmin, cancelar);
 clasesRouter.delete("/admin/clases/:claseId/:fecha/cancelacion", requireAdmin, reactivar);
+clasesRouter.post("/admin/clases/:claseId/:fecha/recordatorio", requireAdmin, recordar);
 clasesRouter.post("/admin/avisos", requireAdmin, publicarAviso);
 clasesRouter.delete("/admin/avisos/:id", requireAdmin, eliminarAviso);

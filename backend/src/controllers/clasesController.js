@@ -7,8 +7,11 @@ import {
   cancelarClase,
   reactivarClase,
   alumnosDeClase,
+  alumnosSinResponder,
+  estaCancelada,
 } from "../services/clasesService.js";
 import { listarAvisos, crearAviso, borrarAviso } from "../services/avisosService.js";
+import { payloadRecordatorio } from "../services/recordatoriosService.js";
 import { enviarAUsuarios, enviarATodosLosAlumnos } from "../services/pushService.js";
 import { esFechaIso } from "../utils/fechas.js";
 import { httpError } from "../utils/httpError.js";
@@ -99,6 +102,23 @@ export async function reactivar(req, res, next) {
       tag: `clase-${claseId}-${fecha}`,
     });
     res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Botón "Recordar" del Sabonim: mismo recordatorio que el automático, en el momento,
+// a los alumnos de la clase que todavía no respondieron
+export async function recordar(req, res, next) {
+  try {
+    const { claseId, fecha } = req.params;
+    const clase = await claseValida(claseId, fecha);
+    if (clase.empezada) throw httpError(400, "La clase ya empezó");
+    if (await estaCancelada(claseId, fecha)) throw httpError(400, "La clase está cancelada");
+
+    const alumnos = await alumnosSinResponder(claseId, fecha);
+    const enviados = await enviarAUsuarios(alumnos, payloadRecordatorio(clase, fecha));
+    res.json({ alumnos: alumnos.length, enviados });
   } catch (err) {
     next(err);
   }

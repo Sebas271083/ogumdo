@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
-import { cancelarClase, getProximasClases, reactivarClase, responderClase } from '../api/client'
+import { cancelarClase, getProximasClases, reactivarClase, recordarClase, responderClase } from '../api/client'
 import { useToast } from '../context/ToastContext'
 import { fechaClase } from '../utils/format'
 
-function Clase({ c, modo, onResponder, onCancelar, onReactivar, ocupado }) {
+function Clase({ c, modo, onResponder, onCancelar, onReactivar, onRecordar, ocupado }) {
   const [abierta, setAbierta] = useState(false)
   const puedeResponder = modo === 'alumno' && !c.cancelada && !c.empezada
 
@@ -53,16 +53,23 @@ function Clase({ c, modo, onResponder, onCancelar, onReactivar, ocupado }) {
               Reactivar
             </button>
           ) : (
-            <button className="btn btn-sm btn-danger" disabled={ocupado} onClick={() => onCancelar(c)}>
-              Cancelar clase
-            </button>
+            <>
+              {!c.empezada && (
+                <button className="btn btn-sm btn-dark" disabled={ocupado} onClick={() => onRecordar(c)}>
+                  🔔 Recordar
+                </button>
+              )}
+              <button className="btn btn-sm btn-danger" disabled={ocupado} onClick={() => onCancelar(c)}>
+                Cancelar clase
+              </button>
+            </>
           ))}
       </div>
     </article>
   )
 }
 
-// modo "alumno": botones Voy / No voy. modo "admin": cancelar o reactivar cada clase.
+// modo "alumno": botones Voy / No voy. modo "admin": recordar, cancelar o reactivar cada clase.
 export default function ProximasClases({ modo = 'alumno' }) {
   const toast = useToast()
   const [clases, setClases] = useState(null)
@@ -111,6 +118,24 @@ export default function ProximasClases({ modo = 'alumno' }) {
 
   const reactivar = (c) => ejecutar(() => reactivarClase(c.claseId, c.fecha), 'Clase reactivada y alumnos avisados')
 
+  // Recordatorio manual: solo a los alumnos de la clase que todavía no respondieron
+  async function recordar(c) {
+    if (!confirm(`¿Mandar el recordatorio de ${c.nombre} (${fechaClase(c.fecha)} ${c.inicio}) a los que todavía no respondieron?`)) {
+      return
+    }
+    setOcupado(true)
+    try {
+      const { alumnos, enviados } = await recordarClase(c.claseId, c.fecha)
+      if (alumnos === 0) toast('Todos los alumnos de esta clase ya respondieron 👍')
+      else if (enviados === 0) toast(`${alumnos} sin responder, pero ninguno tiene las notificaciones activadas`, 'error')
+      else toast(`Recordatorio enviado · ${alumnos} ${alumnos === 1 ? 'alumno' : 'alumnos'} sin responder`)
+    } catch (err) {
+      toast(err.message, 'error')
+    } finally {
+      setOcupado(false)
+    }
+  }
+
   if (!clases) return <div className="cargando-chico">Cargando clases…</div>
   if (!clases.length) return <div className="empty">No hay clases en los próximos 7 días.</div>
 
@@ -125,6 +150,7 @@ export default function ProximasClases({ modo = 'alumno' }) {
           onResponder={responder}
           onCancelar={cancelar}
           onReactivar={reactivar}
+          onRecordar={recordar}
         />
       ))}
     </div>

@@ -1,6 +1,27 @@
 import { getHorarios, estaCancelada, marcarRecordatorioEnviado, alumnosSinResponder } from "./clasesService.js";
 import { enviarAUsuarios, pushHabilitado } from "./pushService.js";
-import { ahoraEnEscuela, diaSemana, aMinutos } from "../utils/fechas.js";
+import { ahoraEnEscuela, diaSemana, aMinutos, sumarDias } from "../utils/fechas.js";
+
+const DIAS = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
+// Notificación de recordatorio (la usan el automático y el botón del Sabonim).
+// "asistencia" hace que la notificación traiga los botones Voy / No voy.
+export function payloadRecordatorio({ claseId, nombre, inicio }, fecha) {
+  const hoy = ahoraEnEscuela().fecha;
+  const cuando =
+    fecha === hoy
+      ? "Hoy"
+      : fecha === sumarDias(hoy, 1)
+        ? "Mañana"
+        : `${DIAS[diaSemana(fecha)]} ${Number(fecha.slice(8, 10))}/${Number(fecha.slice(5, 7))}`;
+  return {
+    titulo: `${cuando}: ${nombre} a las ${inicio}`,
+    cuerpo: "¿Venís a entrenar? Respondé desde acá 👇",
+    url: "/alumno",
+    tag: `clase-${claseId}-${fecha}`,
+    asistencia: { claseId, fecha },
+  };
+}
 
 const HORAS_ANTES = Number(process.env.RECORDATORIO_HORAS_ANTES) || 3;
 const CADA_MS = 5 * 60 * 1000;
@@ -18,13 +39,10 @@ export async function revisarRecordatorios() {
     if (await estaCancelada(h.id, ahora.fecha)) continue;
     if (!(await marcarRecordatorioEnviado(h.id, ahora.fecha))) continue;
 
-    const enviados = await enviarAUsuarios(await alumnosSinResponder(h.id, ahora.fecha), {
-      titulo: `Hoy: ${h.clase} a las ${h.inicio}`,
-      cuerpo: "¿Venís a entrenar? Respondé desde acá 👇",
-      url: "/alumno",
-      tag: `clase-${h.id}-${ahora.fecha}`,
-      asistencia: { claseId: h.id, fecha: ahora.fecha },
-    });
+    const enviados = await enviarAUsuarios(
+      await alumnosSinResponder(h.id, ahora.fecha),
+      payloadRecordatorio({ claseId: h.id, nombre: h.clase, inicio: h.inicio }, ahora.fecha)
+    );
     console.log(`Recordatorio ${h.id} ${ahora.fecha}: ${enviados} notificaciones`);
   }
 }

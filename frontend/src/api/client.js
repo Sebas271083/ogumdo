@@ -60,6 +60,8 @@ export const getEstadoPush = () => request('/admin/push/estado')
 // Admin
 export const cancelarClase = (claseId, fecha, motivo) =>
   request(`/admin/clases/${claseId}/${fecha}/cancelacion`, { method: 'POST', body: json({ motivo }) })
+export const recordarClase = (claseId, fecha) =>
+  request(`/admin/clases/${claseId}/${fecha}/recordatorio`, { method: 'POST' })
 export const reactivarClase = (claseId, fecha) => request(`/admin/clases/${claseId}/${fecha}/cancelacion`, { method: 'DELETE' })
 export const publicarAviso = (titulo, mensaje) => request('/admin/avisos', { method: 'POST', body: json({ titulo, mensaje }) })
 export const borrarAviso = (id) => request(`/admin/avisos/${id}`, { method: 'DELETE' })
