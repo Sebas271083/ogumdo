@@ -26,6 +26,21 @@ CREATE TABLE IF NOT EXISTS registros (
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Aptos físicos (certificado médico) de cada alumno. El vigente es el de vencimiento más lejano;
+-- los anteriores quedan como historial.
+CREATE TABLE IF NOT EXISTS aptos_fisicos (
+  id                 INT PRIMARY KEY AUTO_INCREMENT,
+  usuario_id         INT NOT NULL,
+  fecha_emision      DATE NOT NULL,
+  fecha_vencimiento  DATE NOT NULL,
+  observaciones      VARCHAR(300) NULL,
+  archivo            VARCHAR(100) NULL,
+  archivo_nombre     VARCHAR(255) NULL,
+  creado_ts          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_aptos_usuario (usuario_id, fecha_vencimiento),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS sesiones (
   token_hash  CHAR(64) PRIMARY KEY,
   usuario_id  INT NOT NULL,

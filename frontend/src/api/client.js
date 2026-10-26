@@ -20,6 +20,7 @@ async function request(path, options = {}) {
 const json = (body) => JSON.stringify(body)
 
 export const archivoRegistroUrl = (id) => `${API_URL}/registros/${id}/archivo`
+export const archivoAptoUrl = (id) => `${API_URL}/aptos/${id}/archivo`
 
 // Sesión
 export const getMe = () => request('/auth/me')
@@ -71,6 +72,9 @@ export const borrarAlumno = (id) => request(`/admin/alumnos/${id}`, { method: 'D
 export const agregarRegistro = (alumnoId, formData) =>
   request(`/admin/alumnos/${alumnoId}/registros`, { method: 'POST', body: formData })
 export const borrarRegistro = (id) => request(`/admin/registros/${id}`, { method: 'DELETE' })
+export const agregarApto = (alumnoId, formData) =>
+  request(`/admin/alumnos/${alumnoId}/aptos`, { method: 'POST', body: formData })
+export const borrarApto = (id) => request(`/admin/aptos/${id}`, { method: 'DELETE' })
 
 export const subirFotos = (formData) => request('/admin/galeria', { method: 'POST', body: formData })
 export const borrarFoto = (id) => request(`/admin/galeria/${id}`, { method: 'DELETE' })

@@ -699,6 +699,31 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--red)
 .archivo-ext.ext-link { font-size: 1.4rem; }
 .categoria .videos { margin-bottom: 0.75rem; }
 
+/* ========== Apto físico ========== */
+.aviso-apto {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-left-width: 5px;
+  background: var(--surface-2);
+}
+.aviso-apto-icono { font-size: 1.6rem; }
+.aviso-apto p { margin: 0.2rem 0 0; font-size: 0.88rem; }
+.aviso-apto.apto-vigente { border-left-color: #22c55e; }
+.aviso-apto.apto-por-vencer { border-left-color: var(--gold); background: rgba(242, 183, 5, 0.08); }
+.aviso-apto.apto-vencido, .aviso-apto.apto-sin-apto { border-left-color: var(--red); background: rgba(227, 38, 59, 0.1); }
+.chip.apto-vigente { background: rgba(34, 197, 94, 0.15); color: #7ee2a2; }
+.chip.apto-por-vencer { background: rgba(242, 183, 5, 0.15); color: var(--gold); }
+.chip.apto-vencido, .chip.apto-sin-apto { background: rgba(227, 38, 59, 0.15); color: #ff8a97; }
+.student-list .chip { justify-self: start; }
+.resumen-apto { margin-top: 0.75rem; padding: 0.6rem 0.75rem; background: var(--surface-2); border-radius: 10px; font-size: 0.85rem; align-self: auto; }
+.txt-rojo { color: #ff8a97; }
+.txt-amarillo { color: var(--gold); }
+
 /* ========== Videos de YouTube ========== */
 .videos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; }
 .video-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
@@ -845,6 +870,8 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--red)
   .dan { grid-template-columns: 70px 1fr; }
   .dan .when { grid-column: 2; font-size: 1.2rem; }
   .lightbox { padding: 3.5rem 0.5rem; }
+  .aviso-apto { grid-template-columns: auto 1fr; }
+  .aviso-apto > .btn { grid-column: 1 / -1; justify-self: start; }
   .evento { grid-template-columns: 60px 1fr; }
   .evento-acciones, .archivo-acciones { grid-column: 1 / -1; justify-content: flex-start; }
   .archivo { grid-template-columns: 48px 1fr; }

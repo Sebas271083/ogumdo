@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { getAvisos, getEventos, getPerfil } from '../api/client'
 import Evento from '../components/Evento'
+import { MensajeApto } from '../components/EstadoApto'
 import AppYNotificaciones from '../components/AppYNotificaciones'
 import Avisos from '../components/Avisos'
 import ProximasClases from '../components/ProximasClases'
@@ -64,6 +65,13 @@ export default function PanelAlumno() {
       <section className="sin-padding-top">
         <div className="container">
           <AppYNotificaciones />
+
+          {datos.apto && (
+            <div className="panel">
+              <h2>Apto físico</h2>
+              <MensajeApto apto={datos.apto} vos />
+            </div>
+          )}
 
           <div className="panel">
             <h2>Próximas clases</h2>

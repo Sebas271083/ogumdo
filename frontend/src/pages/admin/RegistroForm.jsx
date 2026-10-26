@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { agregarRegistro } from '../../api/client'
 import { useToast } from '../../context/ToastContext'
 import { CINTURONES, TIPOS_REGISTRO, indiceCinturon } from '../../utils/cinturones'
+import { hoyLocal } from '../../utils/format'
 
-const hoy = () => new Date().toISOString().slice(0, 10)
+const hoy = hoyLocal
 
 export default function RegistroForm({ alumno, onAgregado }) {
   const toast = useToast()

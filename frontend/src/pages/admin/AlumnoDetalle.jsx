@@ -3,6 +3,7 @@ import { borrarRegistro, getAlumno } from '../../api/client'
 import { useToast } from '../../context/ToastContext'
 import RegistrosTabs from '../../components/RegistrosTabs'
 import AlumnoForm from './AlumnoForm'
+import AptoFisico from './AptoFisico'
 import RegistroForm from './RegistroForm'
 
 export default function AlumnoDetalle({ id, onCambio, onEliminado }) {
@@ -34,6 +35,7 @@ export default function AlumnoDetalle({ id, onCambio, onEliminado }) {
   return (
     <>
       <AlumnoForm alumno={datos.user} clases={datos.clases} onGuardado={refrescar} onEliminado={onEliminado} />
+      <AptoFisico alumno={datos.user} apto={datos.apto} onCambio={refrescar} />
       <RegistroForm alumno={datos.user} onAgregado={refrescar} />
       <div className="panel">
         <h2>Historial</h2>

@@ -11,9 +11,9 @@
     { "grado": "1° Dan", "fecha": "1998", "entidad": "Kukkiwon", "detalle": "Primer cinturón negro, Seúl" },
     { "grado": "2° Dan", "fecha": "2001", "entidad": "Kukkiwon", "detalle": "" },
     { "grado": "3° Dan", "fecha": "2005", "entidad": "Kukkiwon", "detalle": "Habilitación como instructor" },
-    { "grado": "4° Dan", "fecha": "2010", "entidad": "Kukkiwon", "detalle": "Título de Sabonim" },
-    { "grado": "5° Dan", "fecha": "2018", "entidad": "Kukkiwon", "detalle": "" },
-    { "grado": "6° Dan", "fecha": "2018", "entidad": "Kukkiwon", "detalle": "" }
+    { "grado": "4° Dan", "fecha": "2010", "entidad": "CAT", "detalle": "Título de Sabonim" },
+    { "grado": "5° Dan", "fecha": "2018", "entidad": "CAT", "detalle": "" },
+    { "grado": "6° Dan", "fecha": "2023", "entidad": "CAT", "detalle": "" }
   ],
   "diplomas": [
     { "titulo": "Instructor Internacional", "entidad": "Kukkiwon – World Taekwondo Academy", "fecha": "2010", "imagen": "/img/profesor/diploma-placeholder.svg" },

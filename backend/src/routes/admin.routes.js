@@ -14,6 +14,8 @@ import {
   editarAlbum,
   eliminarAlbum,
   elegirFotoDestacada,
+  agregarApto,
+  eliminarApto,
   mensajes,
   editarMensaje,
   eliminarMensaje,
@@ -32,6 +34,9 @@ adminRouter.delete("/admin/alumnos/:id", eliminarAlumno);
 
 adminRouter.post("/admin/alumnos/:id/registros", uploadDiploma.single("archivo"), agregarRegistro);
 adminRouter.delete("/admin/registros/:id", eliminarRegistro);
+
+adminRouter.post("/admin/alumnos/:id/aptos", uploadDiploma.single("archivo"), agregarApto);
+adminRouter.delete("/admin/aptos/:id", eliminarApto);
 
 adminRouter.post("/admin/galeria", uploadFoto.array("fotos", 30), subirFotos);
 adminRouter.patch("/admin/galeria/:id", cambiarAlbumFoto);

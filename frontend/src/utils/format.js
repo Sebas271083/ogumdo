@@ -31,6 +31,10 @@ export const rangoHorario = (h) => `${h.inicio} – ${h.fin}`
 
 const isoLocal = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
+// Fecha de hoy según el reloj del dispositivo ("YYYY-MM-DD"). toISOString() da la de UTC:
+// en Argentina, después de las 21 hs devolvería la de mañana.
+export const hoyLocal = () => isoLocal(new Date())
+
 // "2026-10-27" -> "Hoy", "Mañana" o "Martes 27/10"
 export function fechaClase(iso) {
   const hoy = new Date()

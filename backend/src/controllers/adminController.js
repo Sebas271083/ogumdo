@@ -17,6 +17,15 @@ import {
 } from "../services/registrosService.js";
 import { borrarSesionesDeUsuario } from "../services/sesionesService.js";
 import { clasesDeAlumno, asignarClases } from "../services/clasesService.js";
+import {
+  estadoApto,
+  aptoDeAlumno,
+  vencimientosPorAlumno,
+  crearApto,
+  getApto,
+  borrarApto,
+  archivosDeAptos,
+} from "../services/aptosService.js";
 import { listarMensajes, marcarLeido, borrarMensaje } from "../services/mensajesService.js";
 import {
   crearFotos,
@@ -57,7 +66,8 @@ function datosAlumno(body, { passwordObligatoria }) {
 
 export async function alumnos(req, res, next) {
   try {
-    res.json(await listarAlumnos());
+    const [lista, vencimientos] = await Promise.all([listarAlumnos(), vencimientosPorAlumno()]);
+    res.json(lista.map((a) => ({ ...a, apto: estadoApto(vencimientos.get(a.id)) })));
   } catch (err) {
     next(err);
   }
@@ -67,7 +77,49 @@ export async function alumno(req, res, next) {
   try {
     const user = await getAlumno(Number(req.params.id));
     if (!user) return res.status(404).json({ error: "Alumno no encontrado" });
-    res.json({ user, registros: await listarRegistros(user.id), clases: await clasesDeAlumno(user.id) });
+    const [registros, clases, apto] = await Promise.all([
+      listarRegistros(user.id),
+      clasesDeAlumno(user.id),
+      aptoDeAlumno(user.id),
+    ]);
+    res.json({ user, registros, clases, apto });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ===== Apto físico =====
+
+export async function agregarApto(req, res, next) {
+  try {
+    const usuarioId = Number(req.params.id);
+    const b = req.body ?? {};
+    if (!(await getAlumno(usuarioId))) throw httpError(404, "Alumno no encontrado");
+    if (!esFechaIso(b.fecha_emision)) throw httpError(400, "La fecha de entrega es obligatoria");
+    if (!esFechaIso(b.fecha_vencimiento)) throw httpError(400, "La fecha de vencimiento es obligatoria");
+    if (b.fecha_vencimiento <= b.fecha_emision) throw httpError(400, "El vencimiento tiene que ser posterior a la entrega");
+
+    await crearApto({
+      usuarioId,
+      fechaEmision: b.fecha_emision,
+      fechaVencimiento: b.fecha_vencimiento,
+      observaciones: String(b.observaciones ?? "").trim().slice(0, 300),
+      archivo: req.file?.filename,
+      archivoNombre: req.file?.originalname,
+    });
+    res.status(201).json(await aptoDeAlumno(usuarioId));
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function eliminarApto(req, res, next) {
+  try {
+    const apto = await getApto(Number(req.params.id));
+    if (!apto) return res.status(404).json({ error: "Apto no encontrado" });
+    await borrarApto(apto.id);
+    borrarArchivo(apto.archivo);
+    res.json({ ok: true });
   } catch (err) {
     next(err);
   }
@@ -102,7 +154,7 @@ export async function editarAlumno(req, res, next) {
 export async function eliminarAlumno(req, res, next) {
   try {
     const id = Number(req.params.id);
-    const archivos = await archivosDeUsuario(id);
+    const archivos = [...(await archivosDeUsuario(id)), ...(await archivosDeAptos(id))];
     if (!(await borrarAlumno(id))) return res.status(404).json({ error: "Alumno no encontrado" });
     archivos.forEach(borrarArchivo);
     res.json({ ok: true });

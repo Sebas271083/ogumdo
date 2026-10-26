@@ -38,3 +38,6 @@ export const aMinutos = (hhmm) => {
 };
 
 export const esFechaIso = (s) => /^\d{4}-\d{2}-\d{2}$/.test(String(s));
+
+// Días de "desde" a "hasta" (negativo si "hasta" ya pasó)
+export const diasEntre = (desde, hasta) => Math.round((aUTC(hasta) - aUTC(desde)) / 86_400_000);
