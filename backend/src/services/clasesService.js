@@ -109,12 +109,17 @@ export async function asignarClases(usuarioId, claseIds) {
   }
 }
 
-// Alumnos de una clase; si nadie la tiene asignada se avisa a todos los alumnos
+// A quién le corresponden los avisos de una clase: a los que la tienen tildada y a los que no
+// tienen ninguna clase tildada (esos ven todas). Los que eligieron otras clases quedan afuera.
 export async function alumnosDeClase(claseId) {
-  const [asignados] = await pool.query("SELECT usuario_id FROM alumno_clases WHERE clase_id = ?", [claseId]);
-  if (asignados.length) return asignados.map((r) => r.usuario_id);
-  const [todos] = await pool.query("SELECT id FROM usuarios WHERE rol = 'alumno'");
-  return todos.map((r) => r.id);
+  const [rows] = await pool.query(
+    `SELECT u.id FROM usuarios u
+     WHERE u.rol = 'alumno'
+       AND (EXISTS (SELECT 1 FROM alumno_clases ac WHERE ac.usuario_id = u.id AND ac.clase_id = ?)
+            OR NOT EXISTS (SELECT 1 FROM alumno_clases ac WHERE ac.usuario_id = u.id))`,
+    [claseId]
+  );
+  return rows.map((r) => r.id);
 }
 
 export async function alumnosSinResponder(claseId, fecha) {
