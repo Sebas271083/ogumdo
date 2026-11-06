@@ -9,9 +9,10 @@ function politicaContenido(nonce) {
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}'`,
-    // Sin 'unsafe-inline': el sitio no usa estilos escritos en el HTML (los colores van por clases)
-    "style-src 'self' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com",
+    // Sin 'unsafe-inline': el sitio no usa estilos escritos en el HTML (los colores van por clases).
+    // Estilos y tipografías solo del propio sitio (las fuentes vienen de @fontsource).
+    "style-src 'self'",
+    "font-src 'self'",
     "img-src 'self' data: https://i.ytimg.com",
     "frame-src https://www.youtube-nocookie.com https://www.google.com https://maps.google.com",
     "connect-src 'self'",

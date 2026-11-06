@@ -3,6 +3,13 @@ import { createRoot, hydrateRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 import Raiz from './Raiz'
 import './utils/instalacion'
+// Tipografías servidas desde el propio sitio (antes Google Fonts): sin recursos externos que
+// puedan alterarse y sin avisarle a Google cada visita
+import '@fontsource/bebas-neue/400.css'
+import '@fontsource/inter/400.css'
+import '@fontsource/inter/500.css'
+import '@fontsource/inter/600.css'
+import '@fontsource/inter/700.css'
 import './index.css'
 
 // Service worker: hace instalable la web y recibe las notificaciones push (public/sw.js)
