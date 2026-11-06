@@ -27,7 +27,7 @@ export default function CambiarPassword() {
   }
 
   return (
-    <form className="form" onSubmit={enviar} style={{ maxWidth: 520 }}>
+    <form className="form angosto" onSubmit={enviar}>
       <label>
         Contraseña actual
         <input type="password" name="actual" required autoComplete="current-password" />

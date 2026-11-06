@@ -3,6 +3,7 @@ import path from "node:path";
 import { randomBytes } from "node:crypto";
 import multer from "multer";
 import { STORAGE_DIR } from "../config/paths.js";
+import { CSP_ARCHIVOS } from "./seguridad.js";
 
 const IMAGENES = {
   "image/jpeg": ".jpg",
@@ -58,8 +59,7 @@ export function enviarArchivo(res, nombre, { descarga, adjunto, cache } = {}) {
     headers["Content-Disposition"] = `${adjunto ? "attachment" : "inline"}; filename*=UTF-8''${encodeURIComponent(descarga)}`;
   }
   if (cache) headers["Cache-Control"] = "public, max-age=604800";
-  // La CSP de las páginas rompería el visor de PDF del navegador. Estos archivos igual no pueden
-  // ejecutarse: el tipo sale de la extensión que pone el servidor y va con X-Content-Type-Options.
-  res.removeHeader("Content-Security-Policy");
+  // CSP propia de archivos (la de las páginas podría interferir con el visor de PDF del navegador)
+  res.setHeader("Content-Security-Policy", CSP_ARCHIVOS);
   res.sendFile(path.basename(nombre), { root: STORAGE_DIR, headers });
 }

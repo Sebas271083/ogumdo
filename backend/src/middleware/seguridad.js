@@ -9,8 +9,8 @@ function politicaContenido(nonce) {
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}'`,
-    // 'unsafe-inline' solo para estilos: React usa atributos style (cinturones, colores)
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    // Sin 'unsafe-inline': el sitio no usa estilos escritos en el HTML (los colores van por clases)
+    "style-src 'self' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https://i.ytimg.com",
     "frame-src https://www.youtube-nocookie.com https://www.google.com https://maps.google.com",
@@ -24,6 +24,10 @@ function politicaContenido(nonce) {
     ...(produccion ? ["upgrade-insecure-requests"] : []),
   ].join("; ");
 }
+
+// Para los archivos subidos (fotos, diplomas, aptos, descargas): no pueden cargar ni ejecutar
+// nada. Una imagen o un PDF abiertos directo en el navegador se ven igual.
+export const CSP_ARCHIVOS = "default-src 'none'; img-src 'self'; frame-ancestors 'self'";
 
 export function cabecerasSeguridad(req, res, next) {
   const nonce = randomBytes(16).toString("base64");

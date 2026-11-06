@@ -203,7 +203,7 @@ export default function Inicio() {
           </Reveal>
           <Galeria fotos={fotos} />
           {fotos.length > 0 && (
-            <p style={{ marginTop: '2rem' }}>
+            <p className="ver-mas">
               <Link className="btn btn-ghost" to="/galeria">
                 Ver todas las fotos
               </Link>

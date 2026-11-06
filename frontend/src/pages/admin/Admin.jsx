@@ -60,7 +60,7 @@ export default function Admin() {
           {vista === 'descargas' && <AdminDescargas />}
           {vista === 'mensajes' && <AdminMensajes mensajes={mensajes} onCambio={recargarMensajes} />}
           {vista === 'cuenta' && (
-            <div className="panel" style={{ maxWidth: 560 }}>
+            <div className="panel angosto">
               <h2>Cambiar mi contraseña</h2>
               <CambiarPassword />
             </div>

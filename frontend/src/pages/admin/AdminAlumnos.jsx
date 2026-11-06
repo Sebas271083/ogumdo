@@ -40,7 +40,7 @@ export default function AdminAlumnos() {
           placeholder="Buscar alumno…"
           value={busqueda}
           onChange={(ev) => setBusqueda(ev.target.value)}
-          style={{ marginTop: '1rem' }}
+          className="buscar-alumno"
         />
         {(adeudan > 0 || porVencer > 0) && (
           <label className="check resumen-apto">

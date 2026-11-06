@@ -56,6 +56,9 @@ p { margin: 0 0 1em; }
 .panel.cargando { padding: 2rem; }
 .bloque { margin-top: 3.5rem; }
 .botones { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.angosto { max-width: 560px; }
+.buscar-alumno { margin-top: 1rem; }
+.ver-mas { margin-top: 2rem; }
 .ancho { width: 100%; }
 
 /* ========== Botones ========== */
@@ -492,6 +495,18 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--red)
   vertical-align: middle;
 }
 .belt.lg { width: 220px; height: 30px; border-radius: 6px; }
+/* Colores de cada cinturón (mismos ids que utils/cinturones.js). --c2 es la punta. */
+.belt[data-cinturon='blanco'] { --c1: #f5f5f5; }
+.belt[data-cinturon='blanco-amarillo'] { --c1: #f5f5f5; --c2: #f7c600; }
+.belt[data-cinturon='amarillo'] { --c1: #f7c600; }
+.belt[data-cinturon='amarillo-verde'] { --c1: #f7c600; --c2: #1f9d4c; }
+.belt[data-cinturon='verde'] { --c1: #1f9d4c; }
+.belt[data-cinturon='verde-azul'] { --c1: #1f9d4c; --c2: #1f4fd1; }
+.belt[data-cinturon='azul'] { --c1: #1f4fd1; }
+.belt[data-cinturon='azul-rojo'] { --c1: #1f4fd1; --c2: #d01c2e; }
+.belt[data-cinturon='rojo'] { --c1: #d01c2e; }
+.belt[data-cinturon='rojo-negro'] { --c1: #d01c2e; --c2: #111111; }
+.belt[data-cinturon^='negro'] { --c1: #111111; }
 .belt .dan-stripes { position: absolute; right: 8%; top: 0; bottom: 0; display: flex; gap: 3px; }
 .belt .dan-stripes i { width: 3px; background: var(--gold); }
 .belt.lg .dan-stripes { gap: 5px; }
